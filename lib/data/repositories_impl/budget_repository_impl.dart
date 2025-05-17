@@ -464,4 +464,36 @@ class BudgetRepositoryImpl implements BudgetRepository {
     final transactionModels = await _localDataSource.getTransactions();
     return transactionModels.map((model) => model.toDomain()).toList();
   }
+
+  @override
+  Future<void> deleteCategory(String categoryId) async {
+    final categoryModels = await _localDataSource.getCategories();
+    final updatedCategories = categoryModels
+        .where((category) => category.id != categoryId)
+        .toList();
+    
+    await _localDataSource.saveCategories(updatedCategories);
+    
+    // Mettre à jour les enveloppes associées à cette catégorie
+    // On les déplace vers "sans catégorie" (categoryId = null)
+    final envelopeModels = await _localDataSource.getEnvelopes();
+    bool hasUpdates = false;
+    
+    for (int i = 0; i < envelopeModels.length; i++) {
+      if (envelopeModels[i].categoryId == categoryId) {
+        envelopeModels[i] = EnvelopeModel(
+          id: envelopeModels[i].id,
+          name: envelopeModels[i].name,
+          budget: envelopeModels[i].budget,
+          spent: envelopeModels[i].spent,
+          categoryId: null, // Mettre à "sans catégorie"
+        );
+        hasUpdates = true;
+      }
+    }
+    
+    if (hasUpdates) {
+      await _localDataSource.saveEnvelopes(envelopeModels);
+    }
+  }
 }

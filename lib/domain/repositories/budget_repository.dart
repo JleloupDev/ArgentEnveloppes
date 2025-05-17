@@ -9,9 +9,9 @@ abstract class BudgetRepository {
 
   Future<List<Transaction>> getTransactionsByEnvelope(String envelopeId);
   Future<void> addTransaction(Transaction transaction);
-
   Future<List<Category>> getCategories();
   Future<void> createCategory(Category category);
+  Future<void> deleteCategory(String categoryId);
 
   Future<void> exportAsCsv();
   Future<void> importFromCsv(String filePath);

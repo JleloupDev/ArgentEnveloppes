@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/utils/app_utils.dart';
 import '../../domain/entities/envelope.dart';
+import '../../domain/entities/transaction.dart';
+import '../providers/usecase_provider.dart';
 
-class EnvelopeCard extends StatelessWidget {
+class EnvelopeCard extends ConsumerStatefulWidget {
   final Envelope envelope;
   final String? categoryName;
   final VoidCallback onTap;
@@ -16,9 +19,25 @@ class EnvelopeCard extends StatelessWidget {
     required this.onTap,
     this.onAddTransaction,
   });
+  
+  @override
+  ConsumerState<EnvelopeCard> createState() => _EnvelopeCardState();
+}
+
+class _EnvelopeCardState extends ConsumerState<EnvelopeCard> {
+  final TextEditingController _amountController = TextEditingController();
+  bool isLoading = false;
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final envelope = widget.envelope;
+    
     return Card(
       elevation: AppSizes.cardElevation,
       margin: const EdgeInsets.only(bottom: AppSizes.m),
@@ -26,7 +45,7 @@ class EnvelopeCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppSizes.borderRadius),
       ),
       child: InkWell(
-        onTap: onTap,
+        onTap: widget.onTap,
         borderRadius: BorderRadius.circular(AppSizes.borderRadius),
         child: Padding(
           padding: const EdgeInsets.all(AppSizes.m),
@@ -48,7 +67,7 @@ class EnvelopeCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  if (categoryName != null)
+                  if (widget.categoryName != null)
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: AppSizes.s,

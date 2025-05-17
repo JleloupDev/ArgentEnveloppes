@@ -7,6 +7,8 @@ import '../../domain/entities/envelope.dart';
 import '../providers/category_provider.dart';
 import '../providers/envelope_provider.dart';
 import '../layouts/page_layout.dart';
+import '../providers/usecase_provider.dart';
+
 
 class CategoryManagementPage extends ConsumerStatefulWidget {
   const CategoryManagementPage({super.key});
@@ -204,55 +206,63 @@ class _CategoryManagementPageState extends ConsumerState<CategoryManagementPage>
   }
 
   void _showAddCategoryDialog(BuildContext context) {
-    final nameController = TextEditingController();
-    
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Nouvelle catégorie'),
-        content: TextField(
-          controller: nameController,
-          decoration: const InputDecoration(
-            labelText: 'Nom de la catégorie',
-            border: OutlineInputBorder(),
-          ),
-          autofocus: true,
-          textCapitalization: TextCapitalization.sentences,
+  final nameController = TextEditingController();
+  
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Nouvelle catégorie'),
+      content: TextField(
+        controller: nameController,
+        decoration: const InputDecoration(
+          labelText: 'Nom',
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Annuler'),
-          ),
-          TextButton(
-            onPressed: () {
-              final name = nameController.text.trim();
-              if (name.isNotEmpty) {
-                // Créer une nouvelle catégorie
-                final newCategory = Category(
+        autofocus: true,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Annuler'),
+        ),
+        TextButton(          onPressed: () async {
+            final name = nameController.text.trim();
+            if (name.isNotEmpty) {
+              // Créer une nouvelle catégorie
+              final newCategory = Category(
                 id: DateTime.now().millisecondsSinceEpoch.toString(),
                 name: name,
-                );
+              );
+              
+              try {
+                // Utiliser le use case pour créer la catégorie
+                final createCategory = ref.read(createCategoryUseCaseProvider);
+                await createCategory(newCategory);
                 
-                try {
-                  ref.read(categoryProvider.notifier).addCategory(newCategory);
-                  // Succès
-                } catch (e) {
-                  // Afficher une notification d'erreur à l'utilisateur
+                // Mettre à jour l'état et invalider le provider pour forcer la mise à jour
+                ref.read(categoryProvider.notifier).addCategory(newCategory);
+                // Aussi invalidez le provider pour forcer le rechargement
+                ref.invalidate(categoriesProvider);
+                
+                // Fermer le dialogue
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
+              } catch (e) {
+                // Afficher une notification d'erreur à l'utilisateur
+                if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Erreur lors de la création de la catégorie'))
+                    const SnackBar(content: Text('Erreur lors de la création de la catégorie'))
                   );
-                }                
-                Navigator.pop(context);
+                }
               }
-            },
-            child: const Text('Créer'),
-          ),
-        ],
-      ),
-    );
-  }
-
+            }
+          },
+          child: const Text('Créer'),
+        ),
+      ],
+    ),
+  );
+}
 // Remplacer la méthode _showEditCategoryDialog par:
 void _showEditCategoryDialog(BuildContext context, Category category) {
   final nameController = TextEditingController(text: category.name);
@@ -276,7 +286,7 @@ void _showEditCategoryDialog(BuildContext context, Category category) {
           child: const Text('Annuler'),
         ),
         TextButton(
-          onPressed: () {
+          onPressed: () async {
             final name = nameController.text.trim();
             if (name.isNotEmpty) {
               // Mettre à jour la catégorie
@@ -285,18 +295,23 @@ void _showEditCategoryDialog(BuildContext context, Category category) {
                 name: name,
               );
               
-              // Mettre à jour la catégorie dans le state et la persistance
               try {
+                // Utiliser le use case pour mettre à jour la catégorie
+                final updateCategory = ref.read(updateCategoryUseCaseProvider);
+                await updateCategory(updatedCategory);
+                
+                // Mettre à jour l'état local et forcer le rechargement
                 ref.read(categoryProvider.notifier).updateCategory(updatedCategory);
-                // Succès
+                ref.invalidate(categoriesProvider);
+                
+                // Fermer le dialogue
+                Navigator.pop(context);
               } catch (e) {
                 // Afficher une notification d'erreur à l'utilisateur
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Erreur lors de la mise à jour de la catégorie'))
+                  const SnackBar(content: Text('Erreur lors de la mise à jour de la catégorie'))
                 );
               }
-              
-              Navigator.pop(context);
             }
           },
           child: const Text('Enregistrer'),
@@ -321,21 +336,24 @@ void _showDeleteConfirmation(BuildContext context, Category category) {
           child: const Text('Annuler'),
         ),
         TextButton(
-          onPressed: () {
-            // Supprimer la catégorie et persister les changements
-              try {
-                ref.read(categoryProvider.notifier).removeCategory(category.id);
-                // Succès
-              } catch (e) {
-                // Afficher une notification d'erreur à l'utilisateur
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Erreur lors de la suppression de la catégorie'))
-                );
-              }            
-            // À faire: déplacer les enveloppes de cette catégorie vers la catégorie par défaut
-            // Vous pouvez ajouter cette logique ici ou dans un use case spécifique
-            
-            Navigator.pop(context);
+          onPressed: () async {
+            try {
+              // Utiliser le use case pour supprimer la catégorie
+              final deleteCategory = ref.read(deleteCategoryUseCaseProvider);
+              await deleteCategory(category.id);
+              
+              // Mettre à jour l'état local et forcer le rechargement
+              ref.read(categoryProvider.notifier).removeCategory(category.id);
+              ref.invalidate(categoriesProvider);
+              
+              // Fermer le dialogue
+              Navigator.pop(context);
+            } catch (e) {
+              // Afficher une notification d'erreur à l'utilisateur
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Erreur lors de la suppression de la catégorie'))
+              );
+            }
           },
           style: TextButton.styleFrom(
             foregroundColor: AppColors.error,

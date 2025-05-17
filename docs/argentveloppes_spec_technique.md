@@ -313,4 +313,78 @@ Tests requis :
 
 - Tests unitaires pour les repositories et usecases  
 - Tests de conversion JSON ↔️ modèle  
-- Tests widget pour les composants UI  
+- Tests widget pour les composants UI
+
+---
+
+## 11. Bonnes pratiques de développement
+
+### 11.1 Organisation des providers
+
+Pour faciliter la maintenance et respecter la Clean Architecture, les providers sont organisés comme suit :
+
+```dart
+// Provider pour la source de données
+final localStorageDataSourceProvider = Provider<LocalStorageDataSource>((ref) {
+  return LocalStorageDataSource();
+});
+
+// Provider pour l'implémentation du repository
+final budgetRepositoryImplProvider = Provider<BudgetRepository>((ref) {
+  final dataSource = ref.watch(localStorageDataSourceProvider);
+  return BudgetRepositoryImpl(dataSource);
+});
+
+// Provider pour accéder au repository
+final budgetRepositoryProvider = Provider<BudgetRepository>((ref) {
+  return ref.watch(budgetRepositoryImplProvider);
+});
+
+// Providers pour les use cases
+final createCategoryUseCaseProvider = Provider<CreateCategory>((ref) {
+  return CreateCategory(ref.watch(budgetRepositoryProvider));
+});
+```
+
+### 11.2 Utilisation des Use Cases dans l'UI
+
+Toute opération métier doit passer par un use case et non directement par le repository :
+
+```dart
+// Exemple de création d'une catégorie dans l'UI
+final createCategory = ref.read(createCategoryUseCaseProvider);
+await createCategory(newCategory);
+
+// Après l'opération, mise à jour des données
+ref.read(categoryProvider.notifier).addCategory(newCategory);
+ref.invalidate(categoriesProvider);
+```
+
+### 11.3 Gestion des erreurs
+
+Toutes les opérations qui interagissent avec les données doivent être gérées dans un bloc try/catch :
+
+```dart
+try {
+  // Utiliser le use case
+  final createCategory = ref.read(createCategoryUseCaseProvider);
+  await createCategory(newCategory);
+  
+  // Mise à jour de l'UI
+  ref.invalidate(categoriesProvider);
+} catch (e) {
+  // Affichage de l'erreur
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('Erreur lors de l'opération'))
+  );
+}
+```
+
+### 11.4 Flux de données
+
+Le flux de données suit un schéma unidirectionnel :
+
+1. **UI → Use Case → Repository → DataSource → Stockage**
+2. **Stockage → DataSource → Repository → Use Case → UI**
+
+L'utilisation de ce flux garantit la cohérence des données et facilite le débogage.

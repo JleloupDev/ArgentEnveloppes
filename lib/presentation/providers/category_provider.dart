@@ -1,5 +1,28 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/category.dart';
+import '../../domain/repositories/budget_repository.dart';
+import '../providers/usecase_provider.dart';
+import '../../domain/usecases/get_categories.dart'; // Vous devrez créer ce use case
+
+// Provider pour obtenir les catégories via un use case
+final categoriesProvider = FutureProvider<List<Category>>((ref) {
+  final getCategoriesUseCase = ref.watch(getCategoriesUseCaseProvider);
+  return getCategoriesUseCase();
+});
+
+// StateNotifierProvider pour maintenir l'état des catégories
+final categoryProvider = StateNotifierProvider<CategoryNotifier, List<Category>>((ref) {
+  final notifier = CategoryNotifier();
+  
+  // Observer les changements de catégories depuis le repository
+  ref.listen(categoriesProvider, (previous, next) {
+    next.whenData((categories) {
+      notifier.setCategories(categories);
+    });
+  });
+  
+  return notifier;
+});
 
 /// State notifier pour gérer l'état des catégories
 class CategoryNotifier extends StateNotifier<List<Category>> {
@@ -23,8 +46,3 @@ class CategoryNotifier extends StateNotifier<List<Category>> {
     ).toList();
   }
 }
-
-/// Provider pour les catégories
-final categoryProvider = StateNotifierProvider<CategoryNotifier, List<Category>>(
-  (ref) => CategoryNotifier(),
-);

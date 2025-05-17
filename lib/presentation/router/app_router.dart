@@ -22,10 +22,23 @@ class AppRouter {  /// Routes principales de l'application
   }
     /// Gère la génération dynamique des routes avec des paramètres
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
+    // Support pour l'ancienne et la nouvelle façon de naviguer vers les détails d'une enveloppe
     if (settings.name?.startsWith(envelopeDetail) == true) {
-      // Extraire l'ID de l'enveloppe de l'URL
+      // Extraire l'ID de l'enveloppe de l'URL dans le cas d'un URI
       final uri = Uri.parse(settings.name!);
       final envelopeId = uri.queryParameters['id'] ?? '';
+      
+      // Si l'ID est vide, vérifier si l'ID est passé comme argument
+      final id = envelopeId.isNotEmpty ? envelopeId : settings.arguments as String? ?? '';
+      
+      return MaterialPageRoute(
+        builder: (context) => EnvelopeDetailPage(envelopeId: id),
+      );
+    }
+    
+    // Support pour le chemin '/envelope-detail' (pour la compatibilité)
+    if (settings.name == '/envelope-detail') {
+      final String envelopeId = settings.arguments as String? ?? '';
       
       return MaterialPageRoute(
         builder: (context) => EnvelopeDetailPage(envelopeId: envelopeId),
@@ -37,8 +50,11 @@ class AppRouter {  /// Routes principales de l'application
       final uri = Uri.parse(settings.name!);
       final envelopeId = uri.queryParameters['envelopeId'] ?? '';
       
+      // Si l'ID est vide, vérifier si l'ID est passé comme argument
+      final id = envelopeId.isNotEmpty ? envelopeId : settings.arguments as String? ?? '';
+      
       return MaterialPageRoute(
-        builder: (context) => AddTransactionPage(envelopeId: envelopeId),
+        builder: (context) => AddTransactionPage(envelopeId: id),
       );
     }
     

@@ -7,14 +7,8 @@ import 'data/datasources/local_storage_datasource.dart';
 import 'data/repositories_impl/budget_repository_impl.dart';
 import 'domain/repositories/budget_repository.dart';
 import 'presentation/pages/dashboard_page.dart';
+import 'presentation/providers/app_initialization_provider.dart';
 import 'presentation/router/app_router.dart';
-
-/// Provider pour le repository
-final budgetRepositoryProvider = Provider<BudgetRepository>((ref) {
-  // On utilise un LocalStorageDataSource pour la persistance
-  final dataSource = LocalStorageDataSource();
-  return BudgetRepositoryImpl(dataSource);
-});
 
 void main() async {
   // Assurer que les widgets sont initialisés
@@ -32,7 +26,13 @@ void main() async {
 }
 
 class MyApp extends ConsumerWidget {
-  const MyApp({super.key});  @override  Widget build(BuildContext context, WidgetRef ref) {    
+  const MyApp({super.key});
+  
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Initialiser les données de l'application au démarrage
+    ref.watch(appInitializationProvider);
+    
     return MaterialApp(
       title: 'Argentveloppes',
       debugShowCheckedModeBanner: false,
