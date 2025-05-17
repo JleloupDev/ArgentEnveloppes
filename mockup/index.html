@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Argentveloppes - Gestion de Budget</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container navbar-content">
+      <div class="logo">Argentveloppes</div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link active">Tableau de bord</a>
+        <a href="categories.html" class="nav-link">Catégories</a>
+        <a href="envelopes.html" class="nav-link">Enveloppes</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenu Principal -->
+  <main class="container">
+    <h1 class="section-title">Tableau de bord</h1>
+
+    <!-- Statistiques générales -->
+    <section class="dashboard-stats">
+      <div class="stat-card budget">
+        <div class="stat-title">Total des budgets</div>
+        <div class="stat-value">1 500,00 €</div>
+      </div>
+      <div class="stat-card spending">
+        <div class="stat-title">Total des dépenses</div>
+        <div class="stat-value">876,45 €</div>
+      </div>
+      <div class="stat-card remaining">
+        <div class="stat-title">Reste disponible</div>
+        <div class="stat-value">623,55 €</div>
+      </div>
+    </section>
+
+    <!-- Résumé des catégories -->
+    <section>
+      <div class="card-header">
+        <h2 class="card-title">Résumé par catégories</h2>
+        <button class="btn btn-primary" onclick="openModal('categoryModal')">
+          <span class="material-icons">add</span>
+          Nouvelle catégorie
+        </button>
+      </div>
+
+      <div class="categories-container">
+        <div class="category-card">
+          <div class="category-header">
+            <h3 class="category-title">Maison</h3>
+            <div class="category-actions">
+              <button class="btn btn-icon" onclick="editCategory(1)">
+                <span class="material-icons">edit</span>
+              </button>
+              <button class="btn btn-icon btn-danger" onclick="deleteCategory(1)">
+                <span class="material-icons">delete</span>
+              </button>
+            </div>
+          </div>
+          <div class="category-stats">
+            <div class="category-stat">
+              <div class="category-stat-value">3</div>
+              <div class="category-stat-title">Enveloppes</div>
+            </div>
+            <div class="category-stat">
+              <div class="category-stat-value">600,00 €</div>
+              <div class="category-stat-title">Budget</div>
+            </div>
+            <div class="category-stat">
+              <div class="category-stat-value">423,45 €</div>
+              <div class="category-stat-title">Dépenses</div>
+            </div>
+            <div class="category-stat">
+              <div class="category-stat-value">176,55 €</div>
+              <div class="category-stat-title">Disponible</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="category-card">
+          <div class="category-header">
+            <h3 class="category-title">Transport</h3>
+            <div class="category-actions">
+              <button class="btn btn-icon" onclick="editCategory(2)">
+                <span class="material-icons">edit</span>
+              </button>
+              <button class="btn btn-icon btn-danger" onclick="deleteCategory(2)">
+                <span class="material-icons">delete</span>
+              </button>
+            </div>
+          </div>
+          <div class="category-stats">
+            <div class="category-stat">
+              <div class="category-stat-value">2</div>
+              <div class="category-stat-title">Enveloppes</div>
+            </div>
+            <div class="category-stat">
+              <div class="category-stat-value">350,00 €</div>
+              <div class="category-stat-title">Budget</div>
+            </div>
+            <div class="category-stat">
+              <div class="category-stat-value">214,00 €</div>
+              <div class="category-stat-title">Dépenses</div>
+            </div>
+            <div class="category-stat">
+              <div class="category-stat-value">136,00 €</div>
+              <div class="category-stat-title">Disponible</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="category-card">
+          <div class="category-header">
+            <h3 class="category-title">Loisirs</h3>
+            <div class="category-actions">
+              <button class="btn btn-icon" onclick="editCategory(3)">
+                <span class="material-icons">edit</span>
+              </button>
+              <button class="btn btn-icon btn-danger" onclick="deleteCategory(3)">
+                <span class="material-icons">delete</span>
+              </button>
+            </div>
+          </div>
+          <div class="category-stats">
+            <div class="category-stat">
+              <div class="category-stat-value">2</div>
+              <div class="category-stat-title">Enveloppes</div>
+            </div>
+            <div class="category-stat">
+              <div class="category-stat-value">300,00 €</div>
+              <div class="category-stat-title">Budget</div>
+            </div>
+            <div class="category-stat">
+              <div class="category-stat-value">189,00 €</div>
+              <div class="category-stat-title">Dépenses</div>
+            </div>
+            <div class="category-stat">
+              <div class="category-stat-value">111,00 €</div>
+              <div class="category-stat-title">Disponible</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="category-card">
+          <div class="category-header">
+            <h3 class="category-title">Santé</h3>
+            <div class="category-actions">
+              <button class="btn btn-icon" onclick="editCategory(4)">
+                <span class="material-icons">edit</span>
+              </button>
+              <button class="btn btn-icon btn-danger" onclick="deleteCategory(4)">
+                <span class="material-icons">delete</span>
+              </button>
+            </div>
+          </div>
+          <div class="category-stats">
+            <div class="category-stat">
+              <div class="category-stat-value">1</div>
+              <div class="category-stat-title">Enveloppes</div>
+            </div>
+            <div class="category-stat">
+              <div class="category-stat-value">250,00 €</div>
+              <div class="category-stat-title">Budget</div>
+            </div>
+            <div class="category-stat">
+              <div class="category-stat-value">50,00 €</div>
+              <div class="category-stat-title">Dépenses</div>
+            </div>
+            <div class="category-stat">
+              <div class="category-stat-value">200,00 €</div>
+              <div class="category-stat-title">Disponible</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Enveloppes récentes -->
+    <section class="mt-20">
+      <div class="card-header">
+        <h2 class="card-title">Enveloppes récentes</h2>
+        <button class="btn btn-primary" onclick="openModal('envelopeModal')">
+          <span class="material-icons">add</span>
+          Nouvelle enveloppe
+        </button>
+      </div>
+      <div class="envelopes-container">
+        <div class="envelope-card" onclick="location.href='envelope-detail.html'">
+          <div class="envelope-header">
+            <h3 class="envelope-title">Loyer</h3>
+            <span class="envelope-category">Maison</span>
+          </div>
+          <div class="envelope-body">
+            <div class="envelope-amounts">
+              <span class="envelope-amount envelope-amount-spent">450,00 €</span>
+              <span class="envelope-amount envelope-amount-budget">/ 450,00 €</span>
+            </div>
+            <div class="envelope-progress-container">
+              <div class="envelope-progress" style="width: 100%;"></div>
+            </div>
+            <div class="envelope-amounts">
+              <span>Reste :</span>
+              <span class="envelope-amount envelope-amount-remaining">0,00 €</span>
+            </div>
+          </div>
+          <div class="envelope-footer">
+            <div class="quick-transaction">
+              <input type="number" placeholder="Montant">
+              <button class="btn btn-primary btn-icon">
+                <span class="material-icons">add</span>
+              </button>
+            </div>
+            <button class="btn btn-outline">Détails</button>
+          </div>
+        </div>
+
+        <div class="envelope-card">
+          <div class="envelope-header">
+            <h3 class="envelope-title">Courses Alimentaires</h3>
+            <span class="envelope-category">Maison</span>
+          </div>
+          <div class="envelope-body">
+            <div class="envelope-amounts">
+              <span class="envelope-amount envelope-amount-spent">165,45 €</span>
+              <span class="envelope-amount envelope-amount-budget">/ 200,00 €</span>
+            </div>
+            <div class="envelope-progress-container">
+              <div class="envelope-progress warning" style="width: 83%;"></div>
+            </div>
+            <div class="envelope-amounts">
+              <span>Reste :</span>
+              <span class="envelope-amount envelope-amount-remaining">34,55 €</span>
+            </div>
+          </div>
+          <div class="envelope-footer">
+            <div class="quick-transaction">
+              <input type="number" placeholder="Montant">
+              <button class="btn btn-primary btn-icon">
+                <span class="material-icons">add</span>
+              </button>
+            </div>
+            <button class="btn btn-outline">Détails</button>
+          </div>
+        </div>
+
+        <div class="envelope-card">
+          <div class="envelope-header">
+            <h3 class="envelope-title">Carburant</h3>
+            <span class="envelope-category">Transport</span>
+          </div>
+          <div class="envelope-body">
+            <div class="envelope-amounts">
+              <span class="envelope-amount envelope-amount-spent">132,00 €</span>
+              <span class="envelope-amount envelope-amount-budget">/ 120,00 €</span>
+            </div>
+            <div class="envelope-progress-container">
+              <div class="envelope-progress danger" style="width: 110%;"></div>
+            </div>
+            <div class="envelope-amounts">
+              <span>Reste :</span>
+              <span class="envelope-amount envelope-amount-remaining">-12,00 €</span>
+            </div>
+          </div>
+          <div class="envelope-footer">
+            <div class="quick-transaction">
+              <input type="number" placeholder="Montant">
+              <button class="btn btn-primary btn-icon">
+                <span class="material-icons">add</span>
+              </button>
+            </div>
+            <button class="btn btn-outline">Détails</button>
+          </div>
+        </div>
+
+        <div class="envelope-card">
+          <div class="envelope-header">
+            <h3 class="envelope-title">Restaurants</h3>
+            <span class="envelope-category">Loisirs</span>
+          </div>
+          <div class="envelope-body">
+            <div class="envelope-amounts">
+              <span class="envelope-amount envelope-amount-spent">98,00 €</span>
+              <span class="envelope-amount envelope-amount-budget">/ 150,00 €</span>
+            </div>
+            <div class="envelope-progress-container">
+              <div class="envelope-progress" style="width: 65%;"></div>
+            </div>
+            <div class="envelope-amounts">
+              <span>Reste :</span>
+              <span class="envelope-amount envelope-amount-remaining">52,00 €</span>
+            </div>
+          </div>
+          <div class="envelope-footer">
+            <div class="quick-transaction">
+              <input type="number" placeholder="Montant">
+              <button class="btn btn-primary btn-icon">
+                <span class="material-icons">add</span>
+              </button>
+            </div>
+            <button class="btn btn-outline">Détails</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal pour nouvelle catégorie -->
+  <div id="categoryModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Nouvelle catégorie</h2>
+        <button class="modal-close" onclick="closeModal('categoryModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="categoryName" class="form-label">Nom de la catégorie</label>
+          <input type="text" id="categoryName" class="form-control" placeholder="Ex: Maison, Loisirs, Transport...">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('categoryModal')">Annuler</button>
+        <button class="btn btn-primary">Créer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal pour nouvelle enveloppe -->
+  <div id="envelopeModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Nouvelle enveloppe</h2>
+        <button class="modal-close" onclick="closeModal('envelopeModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="envelopeName" class="form-label">Nom de l'enveloppe</label>
+          <input type="text" id="envelopeName" class="form-control" placeholder="Ex: Loyer, Courses, Carburant...">
+        </div>
+        <div class="form-group">
+          <label for="envelopeBudget" class="form-label">Budget</label>
+          <input type="number" id="envelopeBudget" class="form-control" placeholder="Montant en €">
+        </div>
+        <div class="form-group">
+          <label for="envelopeCategory" class="form-label">Catégorie</label>
+          <select id="envelopeCategory" class="form-select">
+            <option value="">Sans catégorie</option>
+            <option value="1">Maison</option>
+            <option value="2">Transport</option>
+            <option value="3">Loisirs</option>
+            <option value="4">Santé</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('envelopeModal')">Annuler</button>
+        <button class="btn btn-primary">Créer</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Fonctions pour les modals
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+    
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+    
+    // Placeholder pour fonctions futures
+    function editCategory(id) {
+      console.log('Éditer catégorie ' + id);
+      // Implémentation à venir
+    }
+    
+    function deleteCategory(id) {
+      console.log('Supprimer catégorie ' + id);
+      // Implémentation à venir
+    }
+  </script>
+</body>
+</html>

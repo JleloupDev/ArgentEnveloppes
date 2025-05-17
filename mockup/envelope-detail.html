@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Argentveloppes - Détail Enveloppe</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container navbar-content">
+      <div class="logo">Argentveloppes</div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Tableau de bord</a>
+        <a href="categories.html" class="nav-link">Catégories</a>
+        <a href="envelopes.html" class="nav-link active">Enveloppes</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenu Principal -->
+  <main class="container">
+    <div class="flex-between mb-20">
+      <h1 class="section-title">
+        <a href="envelopes.html" style="text-decoration: none; color: inherit;">
+          <span class="material-icons" style="vertical-align: middle; margin-right: 10px;">arrow_back</span>
+        </a>
+        Détails de l'enveloppe
+      </h1>
+      <button class="btn btn-primary" onclick="openModal('editEnvelopeModal')">
+        <span class="material-icons">edit</span>
+        Modifier
+      </button>
+    </div>
+
+    <div class="envelope-detail">
+      <div class="envelope-info">
+        <div class="envelope-info-header">
+          <h2 class="envelope-info-title">Courses Alimentaires</h2>
+          <div class="envelope-info-category">Maison</div>
+        </div>
+
+        <div class="envelope-info-stats">
+          <div class="envelope-info-stat">
+            <div class="envelope-info-stat-label">Budget total:</div>
+            <div class="envelope-info-stat-value">200,00 €</div>
+          </div>
+          <div class="envelope-info-stat">
+            <div class="envelope-info-stat-label">Dépenses:</div>
+            <div class="envelope-info-stat-value">165,45 €</div>
+          </div>
+          <div class="envelope-info-stat">
+            <div class="envelope-info-stat-label">Reste disponible:</div>
+            <div class="envelope-info-stat-value">34,55 €</div>
+          </div>
+        </div>
+
+        <div style="margin: 20px 0;">
+          <div style="margin-bottom: 10px;">Progression:</div>
+          <div class="envelope-progress-container">
+            <div class="envelope-progress warning" style="width: 83%;"></div>
+          </div>
+          <div style="text-align: right; font-size: 14px; color: var(--gray);">83%</div>
+        </div>
+      </div>
+
+      <div class="transactions-container">
+        <h2 style="margin-bottom: 20px;">Transactions</h2>
+        
+        <div class="transaction-form">
+          <h3 style="margin-bottom: 15px;">Ajouter une transaction</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="transactionType" class="form-label">Type</label>
+              <select id="transactionType" class="form-select">
+                <option value="expense">Dépense</option>
+                <option value="income">Revenu</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="transactionAmount" class="form-label">Montant</label>
+              <input type="number" id="transactionAmount" class="form-control" placeholder="0.00">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="transactionDescription" class="form-label">Description</label>
+            <input type="text" id="transactionDescription" class="form-control" placeholder="Description de la transaction">
+          </div>
+          <button class="btn btn-primary" style="margin-top: 10px;">Ajouter</button>
+        </div>
+
+        <h3 style="margin-bottom: 15px;">Historique des transactions</h3>
+        <div class="transactions-list">
+          <div class="transaction-item">
+            <div class="transaction-details">
+              <div class="transaction-date">17/05/2025</div>
+              <div class="transaction-description">Courses hebdomadaires</div>
+            </div>
+            <div class="transaction-amount expense">-45,67 €</div>
+            <div class="transaction-actions">
+              <button class="btn btn-icon btn-danger">
+                <span class="material-icons">delete</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="transaction-item">
+            <div class="transaction-details">
+              <div class="transaction-date">14/05/2025</div>
+              <div class="transaction-description">Courses supplémentaires</div>
+            </div>
+            <div class="transaction-amount expense">-12,99 €</div>
+            <div class="transaction-actions">
+              <button class="btn btn-icon btn-danger">
+                <span class="material-icons">delete</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="transaction-item">
+            <div class="transaction-details">
+              <div class="transaction-date">10/05/2025</div>
+              <div class="transaction-description">Courses hebdomadaires</div>
+            </div>
+            <div class="transaction-amount expense">-52,34 €</div>
+            <div class="transaction-actions">
+              <button class="btn btn-icon btn-danger">
+                <span class="material-icons">delete</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="transaction-item">
+            <div class="transaction-details">
+              <div class="transaction-date">05/05/2025</div>
+              <div class="transaction-description">Remboursement coloc</div>
+            </div>
+            <div class="transaction-amount income">+25,00 €</div>
+            <div class="transaction-actions">
+              <button class="btn btn-icon btn-danger">
+                <span class="material-icons">delete</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="transaction-item">
+            <div class="transaction-details">
+              <div class="transaction-date">03/05/2025</div>
+              <div class="transaction-description">Courses hebdomadaires</div>
+            </div>
+            <div class="transaction-amount expense">-48,75 €</div>
+            <div class="transaction-actions">
+              <button class="btn btn-icon btn-danger">
+                <span class="material-icons">delete</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="transaction-item">
+            <div class="transaction-details">
+              <div class="transaction-date">26/04/2025</div>
+              <div class="transaction-description">Courses hebdomadaires</div>
+            </div>
+            <div class="transaction-amount expense">-30,70 €</div>
+            <div class="transaction-actions">
+              <button class="btn btn-icon btn-danger">
+                <span class="material-icons">delete</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal pour modifier une enveloppe -->
+  <div id="editEnvelopeModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Modifier l'enveloppe</h2>
+        <button class="modal-close" onclick="closeModal('editEnvelopeModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="editEnvelopeName" class="form-label">Nom de l'enveloppe</label>
+          <input type="text" id="editEnvelopeName" class="form-control" value="Courses Alimentaires">
+        </div>
+        <div class="form-group">
+          <label for="editEnvelopeBudget" class="form-label">Budget</label>
+          <input type="number" id="editEnvelopeBudget" class="form-control" value="200">
+        </div>
+        <div class="form-group">
+          <label for="editEnvelopeCategory" class="form-label">Catégorie</label>
+          <select id="editEnvelopeCategory" class="form-select">
+            <option value="">Sans catégorie</option>
+            <option value="1" selected>Maison</option>
+            <option value="2">Transport</option>
+            <option value="3">Loisirs</option>
+            <option value="4">Santé</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" onclick="confirmDeleteEnvelope()">Supprimer</button>
+        <button class="btn btn-outline" onclick="closeModal('editEnvelopeModal')">Annuler</button>
+        <button class="btn btn-primary">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmation de suppression -->
+  <div id="deleteEnvelopeModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Confirmer la suppression</h2>
+        <button class="modal-close" onclick="closeModal('deleteEnvelopeModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Êtes-vous sûr de vouloir supprimer cette enveloppe ? <br>
+           Toutes les transactions associées seront également supprimées.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('deleteEnvelopeModal')">Annuler</button>
+        <button class="btn btn-danger">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmation de suppression de transaction -->
+  <div id="deleteTransactionModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Confirmer la suppression</h2>
+        <button class="modal-close" onclick="closeModal('deleteTransactionModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Êtes-vous sûr de vouloir supprimer cette transaction ?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('deleteTransactionModal')">Annuler</button>
+        <button class="btn btn-danger">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Fonctions pour les modals
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+    
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+    
+    function confirmDeleteEnvelope() {
+      closeModal('editEnvelopeModal');
+      openModal('deleteEnvelopeModal');
+    }
+    
+    // Ajout des gestionnaires d'événements aux boutons de suppression de transaction
+    document.addEventListener('DOMContentLoaded', function() {
+      const deleteButtons = document.querySelectorAll('.transaction-actions .btn-danger');
+      deleteButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.stopPropagation();
+          openModal('deleteTransactionModal');
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Argentveloppes - Gestion des Enveloppes</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container navbar-content">
+      <div class="logo">Argentveloppes</div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Tableau de bord</a>
+        <a href="categories.html" class="nav-link">Catégories</a>
+        <a href="envelopes.html" class="nav-link active">Enveloppes</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenu Principal -->
+  <main class="container">
+    <div class="flex-between mb-20">
+      <h1 class="section-title">Gestion des enveloppes</h1>
+      <button class="btn btn-primary" onclick="openModal('envelopeModal')">
+        <span class="material-icons">add</span>
+        Nouvelle enveloppe
+      </button>
+    </div>
+
+    <div class="card mb-20">
+      <h3>Filtrer les enveloppes</h3>
+      <div class="form-row" style="margin-top: 15px;">
+        <div class="form-group">
+          <label for="filterCategory" class="form-label">Catégorie</label>
+          <select id="filterCategory" class="form-select">
+            <option value="">Toutes les catégories</option>
+            <option value="1">Maison</option>
+            <option value="2">Transport</option>
+            <option value="3">Loisirs</option>
+            <option value="4">Santé</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="filterStatus" class="form-label">État</label>
+          <select id="filterStatus" class="form-select">
+            <option value="">Tous les états</option>
+            <option value="normal">Normal</option>
+            <option value="warning">Attention</option>
+            <option value="danger">Dépassement</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="searchEnvelope" class="form-label">Recherche</label>
+          <input type="text" id="searchEnvelope" class="form-control" placeholder="Rechercher une enveloppe...">
+        </div>
+      </div>
+    </div>
+
+    <div class="envelopes-container">
+      <div class="envelope-card" onclick="location.href='envelope-detail.html'">
+        <div class="envelope-header">
+          <h3 class="envelope-title">Loyer</h3>
+          <span class="envelope-category">Maison</span>
+        </div>
+        <div class="envelope-body">
+          <div class="envelope-amounts">
+            <span class="envelope-amount envelope-amount-spent">450,00 €</span>
+            <span class="envelope-amount envelope-amount-budget">/ 450,00 €</span>
+          </div>
+          <div class="envelope-progress-container">
+            <div class="envelope-progress" style="width: 100%;"></div>
+          </div>
+          <div class="envelope-amounts">
+            <span>Reste :</span>
+            <span class="envelope-amount envelope-amount-remaining">0,00 €</span>
+          </div>
+        </div>
+        <div class="envelope-footer">
+          <div class="quick-transaction">
+            <input type="number" placeholder="Montant">
+            <button class="btn btn-primary btn-icon">
+              <span class="material-icons">add</span>
+            </button>
+          </div>
+          <div>
+            <button class="btn btn-outline">Détails</button>
+            <button class="btn btn-icon" onclick="event.stopPropagation(); openModal('editEnvelopeModal');">
+              <span class="material-icons">edit</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="envelope-card" onclick="location.href='envelope-detail.html'">
+        <div class="envelope-header">
+          <h3 class="envelope-title">Courses Alimentaires</h3>
+          <span class="envelope-category">Maison</span>
+        </div>
+        <div class="envelope-body">
+          <div class="envelope-amounts">
+            <span class="envelope-amount envelope-amount-spent">165,45 €</span>
+            <span class="envelope-amount envelope-amount-budget">/ 200,00 €</span>
+          </div>
+          <div class="envelope-progress-container">
+            <div class="envelope-progress warning" style="width: 83%;"></div>
+          </div>
+          <div class="envelope-amounts">
+            <span>Reste :</span>
+            <span class="envelope-amount envelope-amount-remaining">34,55 €</span>
+          </div>
+        </div>
+        <div class="envelope-footer">
+          <div class="quick-transaction">
+            <input type="number" placeholder="Montant">
+            <button class="btn btn-primary btn-icon">
+              <span class="material-icons">add</span>
+            </button>
+          </div>
+          <div>
+            <button class="btn btn-outline">Détails</button>
+            <button class="btn btn-icon" onclick="event.stopPropagation(); openModal('editEnvelopeModal');">
+              <span class="material-icons">edit</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="envelope-card" onclick="location.href='envelope-detail.html'">
+        <div class="envelope-header">
+          <h3 class="envelope-title">Entretien</h3>
+          <span class="envelope-category">Maison</span>
+        </div>
+        <div class="envelope-body">
+          <div class="envelope-amounts">
+            <span class="envelope-amount envelope-amount-spent">8,00 €</span>
+            <span class="envelope-amount envelope-amount-budget">/ 50,00 €</span>
+          </div>
+          <div class="envelope-progress-container">
+            <div class="envelope-progress" style="width: 16%;"></div>
+          </div>
+          <div class="envelope-amounts">
+            <span>Reste :</span>
+            <span class="envelope-amount envelope-amount-remaining">42,00 €</span>
+          </div>
+        </div>
+        <div class="envelope-footer">
+          <div class="quick-transaction">
+            <input type="number" placeholder="Montant">
+            <button class="btn btn-primary btn-icon">
+              <span class="material-icons">add</span>
+            </button>
+          </div>
+          <div>
+            <button class="btn btn-outline">Détails</button>
+            <button class="btn btn-icon" onclick="event.stopPropagation(); openModal('editEnvelopeModal');">
+              <span class="material-icons">edit</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="envelope-card" onclick="location.href='envelope-detail.html'">
+        <div class="envelope-header">
+          <h3 class="envelope-title">Carburant</h3>
+          <span class="envelope-category">Transport</span>
+        </div>
+        <div class="envelope-body">
+          <div class="envelope-amounts">
+            <span class="envelope-amount envelope-amount-spent">132,00 €</span>
+            <span class="envelope-amount envelope-amount-budget">/ 120,00 €</span>
+          </div>
+          <div class="envelope-progress-container">
+            <div class="envelope-progress danger" style="width: 110%;"></div>
+          </div>
+          <div class="envelope-amounts">
+            <span>Reste :</span>
+            <span class="envelope-amount envelope-amount-remaining">-12,00 €</span>
+          </div>
+        </div>
+        <div class="envelope-footer">
+          <div class="quick-transaction">
+            <input type="number" placeholder="Montant">
+            <button class="btn btn-primary btn-icon">
+              <span class="material-icons">add</span>
+            </button>
+          </div>
+          <div>
+            <button class="btn btn-outline">Détails</button>
+            <button class="btn btn-icon" onclick="event.stopPropagation(); openModal('editEnvelopeModal');">
+              <span class="material-icons">edit</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="envelope-card" onclick="location.href='envelope-detail.html'">
+        <div class="envelope-header">
+          <h3 class="envelope-title">Transport en commun</h3>
+          <span class="envelope-category">Transport</span>
+        </div>
+        <div class="envelope-body">
+          <div class="envelope-amounts">
+            <span class="envelope-amount envelope-amount-spent">82,00 €</span>
+            <span class="envelope-amount envelope-amount-budget">/ 230,00 €</span>
+          </div>
+          <div class="envelope-progress-container">
+            <div class="envelope-progress" style="width: 36%;"></div>
+          </div>
+          <div class="envelope-amounts">
+            <span>Reste :</span>
+            <span class="envelope-amount envelope-amount-remaining">148,00 €</span>
+          </div>
+        </div>
+        <div class="envelope-footer">
+          <div class="quick-transaction">
+            <input type="number" placeholder="Montant">
+            <button class="btn btn-primary btn-icon">
+              <span class="material-icons">add</span>
+            </button>
+          </div>
+          <div>
+            <button class="btn btn-outline">Détails</button>
+            <button class="btn btn-icon" onclick="event.stopPropagation(); openModal('editEnvelopeModal');">
+              <span class="material-icons">edit</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="envelope-card" onclick="location.href='envelope-detail.html'">
+        <div class="envelope-header">
+          <h3 class="envelope-title">Restaurants</h3>
+          <span class="envelope-category">Loisirs</span>
+        </div>
+        <div class="envelope-body">
+          <div class="envelope-amounts">
+            <span class="envelope-amount envelope-amount-spent">98,00 €</span>
+            <span class="envelope-amount envelope-amount-budget">/ 150,00 €</span>
+          </div>
+          <div class="envelope-progress-container">
+            <div class="envelope-progress" style="width: 65%;"></div>
+          </div>
+          <div class="envelope-amounts">
+            <span>Reste :</span>
+            <span class="envelope-amount envelope-amount-remaining">52,00 €</span>
+          </div>
+        </div>
+        <div class="envelope-footer">
+          <div class="quick-transaction">
+            <input type="number" placeholder="Montant">
+            <button class="btn btn-primary btn-icon">
+              <span class="material-icons">add</span>
+            </button>
+          </div>
+          <div>
+            <button class="btn btn-outline">Détails</button>
+            <button class="btn btn-icon" onclick="event.stopPropagation(); openModal('editEnvelopeModal');">
+              <span class="material-icons">edit</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="envelope-card" onclick="location.href='envelope-detail.html'">
+        <div class="envelope-header">
+          <h3 class="envelope-title">Cinéma & Sorties</h3>
+          <span class="envelope-category">Loisirs</span>
+        </div>
+        <div class="envelope-body">
+          <div class="envelope-amounts">
+            <span class="envelope-amount envelope-amount-spent">91,00 €</span>
+            <span class="envelope-amount envelope-amount-budget">/ 150,00 €</span>
+          </div>
+          <div class="envelope-progress-container">
+            <div class="envelope-progress" style="width: 61%;"></div>
+          </div>
+          <div class="envelope-amounts">
+            <span>Reste :</span>
+            <span class="envelope-amount envelope-amount-remaining">59,00 €</span>
+          </div>
+        </div>
+        <div class="envelope-footer">
+          <div class="quick-transaction">
+            <input type="number" placeholder="Montant">
+            <button class="btn btn-primary btn-icon">
+              <span class="material-icons">add</span>
+            </button>
+          </div>
+          <div>
+            <button class="btn btn-outline">Détails</button>
+            <button class="btn btn-icon" onclick="event.stopPropagation(); openModal('editEnvelopeModal');">
+              <span class="material-icons">edit</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="envelope-card" onclick="location.href='envelope-detail.html'">
+        <div class="envelope-header">
+          <h3 class="envelope-title">Médical</h3>
+          <span class="envelope-category">Santé</span>
+        </div>
+        <div class="envelope-body">
+          <div class="envelope-amounts">
+            <span class="envelope-amount envelope-amount-spent">50,00 €</span>
+            <span class="envelope-amount envelope-amount-budget">/ 250,00 €</span>
+          </div>
+          <div class="envelope-progress-container">
+            <div class="envelope-progress" style="width: 20%;"></div>
+          </div>
+          <div class="envelope-amounts">
+            <span>Reste :</span>
+            <span class="envelope-amount envelope-amount-remaining">200,00 €</span>
+          </div>
+        </div>
+        <div class="envelope-footer">
+          <div class="quick-transaction">
+            <input type="number" placeholder="Montant">
+            <button class="btn btn-primary btn-icon">
+              <span class="material-icons">add</span>
+            </button>
+          </div>
+          <div>
+            <button class="btn btn-outline">Détails</button>
+            <button class="btn btn-icon" onclick="event.stopPropagation(); openModal('editEnvelopeModal');">
+              <span class="material-icons">edit</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal pour nouvelle enveloppe -->
+  <div id="envelopeModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Nouvelle enveloppe</h2>
+        <button class="modal-close" onclick="closeModal('envelopeModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="envelopeName" class="form-label">Nom de l'enveloppe</label>
+          <input type="text" id="envelopeName" class="form-control" placeholder="Ex: Loyer, Courses, Carburant...">
+        </div>
+        <div class="form-group">
+          <label for="envelopeBudget" class="form-label">Budget</label>
+          <input type="number" id="envelopeBudget" class="form-control" placeholder="Montant en €">
+        </div>
+        <div class="form-group">
+          <label for="envelopeCategory" class="form-label">Catégorie</label>
+          <select id="envelopeCategory" class="form-select">
+            <option value="">Sans catégorie</option>
+            <option value="1">Maison</option>
+            <option value="2">Transport</option>
+            <option value="3">Loisirs</option>
+            <option value="4">Santé</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('envelopeModal')">Annuler</button>
+        <button class="btn btn-primary">Créer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal pour modifier une enveloppe -->
+  <div id="editEnvelopeModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Modifier l'enveloppe</h2>
+        <button class="modal-close" onclick="closeModal('editEnvelopeModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="editEnvelopeName" class="form-label">Nom de l'enveloppe</label>
+          <input type="text" id="editEnvelopeName" class="form-control" value="Nom actuel de l'enveloppe">
+        </div>
+        <div class="form-group">
+          <label for="editEnvelopeBudget" class="form-label">Budget</label>
+          <input type="number" id="editEnvelopeBudget" class="form-control" value="150">
+        </div>
+        <div class="form-group">
+          <label for="editEnvelopeCategory" class="form-label">Catégorie</label>
+          <select id="editEnvelopeCategory" class="form-select">
+            <option value="">Sans catégorie</option>
+            <option value="1" selected>Maison</option>
+            <option value="2">Transport</option>
+            <option value="3">Loisirs</option>
+            <option value="4">Santé</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" onclick="confirmDeleteEnvelope()">Supprimer</button>
+        <button class="btn btn-outline" onclick="closeModal('editEnvelopeModal')">Annuler</button>
+        <button class="btn btn-primary">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmation de suppression -->
+  <div id="deleteEnvelopeModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Confirmer la suppression</h2>
+        <button class="modal-close" onclick="closeModal('deleteEnvelopeModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Êtes-vous sûr de vouloir supprimer cette enveloppe ? <br>
+           Toutes les transactions associées seront également supprimées.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('deleteEnvelopeModal')">Annuler</button>
+        <button class="btn btn-danger">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Fonctions pour les modals
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+    
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+    
+    function confirmDeleteEnvelope() {
+      closeModal('editEnvelopeModal');
+      openModal('deleteEnvelopeModal');
+    }
+  </script>
+</body>
+</html>

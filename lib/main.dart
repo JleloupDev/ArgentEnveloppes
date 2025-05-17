@@ -1,0 +1,69 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'core/constants/app_constants.dart';
+import 'data/datasources/local_storage_datasource.dart';
+import 'data/repositories_impl/budget_repository_impl.dart';
+import 'domain/repositories/budget_repository.dart';
+import 'presentation/pages/dashboard_page.dart';
+import 'presentation/router/app_router.dart';
+
+/// Provider pour le repository
+final budgetRepositoryProvider = Provider<BudgetRepository>((ref) {
+  // On utilise un LocalStorageDataSource pour la persistance
+  final dataSource = LocalStorageDataSource();
+  return BudgetRepositoryImpl(dataSource);
+});
+
+void main() async {
+  // Assurer que les widgets sont initialisés
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialiser les shared preferences
+  await SharedPreferences.getInstance();
+
+  // Exécuter l'application avec Riverpod comme provider
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
+}
+
+class MyApp extends ConsumerWidget {
+  const MyApp({super.key});  @override  Widget build(BuildContext context, WidgetRef ref) {    
+    return MaterialApp(
+      title: 'Argentveloppes',
+      debugShowCheckedModeBanner: false,
+      initialRoute: AppRouter.dashboard,
+      routes: AppRouter.getRoutes(),
+      onGenerateRoute: AppRouter.onGenerateRoute,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
+        useMaterial3: true,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.primary,
+          foregroundColor: AppColors.textLight,
+        ),
+        scaffoldBackgroundColor: AppColors.background,
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppSizes.borderRadius),
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: AppSizes.m,
+            vertical: AppSizes.m,
+          ),
+          fillColor: AppColors.surface,
+          filled: true,        ),
+        cardTheme: CardTheme(
+          color: AppColors.surface,
+          elevation: AppSizes.cardElevation,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppSizes.borderRadius),
+          ),        ),
+      ),
+    );
+  }
+}

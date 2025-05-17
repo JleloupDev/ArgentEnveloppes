@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Lancer Argentveloppes avec débogage",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${webRoot}/src/*"
+      },
+      "preLaunchTask": "npm: dev",
+      "userDataDir": "${workspaceFolder}/.vscode/chrome-debug-profile"
+    },
+    {
+      "type": "pwa-msedge",
+      "request": "launch",
+      "name": "Lancer Argentveloppes avec Edge",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "npm: dev"
+    }
+  ]
+}

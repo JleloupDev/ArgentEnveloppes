@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "dev",
+      "label": "npm: dev",
+      "detail": "vite",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "javascript",
+        "pattern": {
+          "regexp": ".",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": "  VITE v.*ready in.*"
+        }
+      }
+    },
+    {
+      "type": "shell",
+      "label": "Capture Console Logs",
+      "command": "code --install-extension sburg.vscode-javascript-booster && code --install-extension msjsdiag.debugger-for-chrome",
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      }
+    }
+  ]
+}

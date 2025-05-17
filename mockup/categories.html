@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Argentveloppes - Gestion des Catégories</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container navbar-content">
+      <div class="logo">Argentveloppes</div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Tableau de bord</a>
+        <a href="categories.html" class="nav-link active">Catégories</a>
+        <a href="envelopes.html" class="nav-link">Enveloppes</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenu Principal -->
+  <main class="container">
+    <div class="flex-between mb-20">
+      <h1 class="section-title">Gestion des catégories</h1>
+      <button class="btn btn-primary" onclick="openModal('categoryModal')">
+        <span class="material-icons">add</span>
+        Nouvelle catégorie
+      </button>
+    </div>
+
+    <div class="categories-container">
+      <div class="category-card">
+        <div class="category-header">
+          <h3 class="category-title">Maison</h3>
+          <div class="category-actions">
+            <button class="btn btn-icon" onclick="openModal('editCategoryModal')">
+              <span class="material-icons">edit</span>
+            </button>
+            <button class="btn btn-icon btn-danger" onclick="confirmDeleteCategory(1)">
+              <span class="material-icons">delete</span>
+            </button>
+          </div>
+        </div>
+        <div class="category-stats">
+          <div class="category-stat">
+            <div class="category-stat-value">3</div>
+            <div class="category-stat-title">Enveloppes</div>
+          </div>
+          <div class="category-stat">
+            <div class="category-stat-value">600,00 €</div>
+            <div class="category-stat-title">Budget</div>
+          </div>
+          <div class="category-stat">
+            <div class="category-stat-value">423,45 €</div>
+            <div class="category-stat-title">Dépenses</div>
+          </div>
+          <div class="category-stat">
+            <div class="category-stat-value">176,55 €</div>
+            <div class="category-stat-title">Disponible</div>
+          </div>
+        </div>
+        <hr style="margin: 15px 0; border: none; border-top: 1px solid var(--light);">
+        <div class="envelopes-list">
+          <h4 style="margin-bottom: 10px;">Enveloppes dans cette catégorie:</h4>
+          <ul style="padding-left: 20px;">
+            <li>Loyer - 450,00 €</li>
+            <li>Courses Alimentaires - 200,00 €</li>
+            <li>Entretien - 50,00 €</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="category-card">
+        <div class="category-header">
+          <h3 class="category-title">Transport</h3>
+          <div class="category-actions">
+            <button class="btn btn-icon" onclick="openModal('editCategoryModal')">
+              <span class="material-icons">edit</span>
+            </button>
+            <button class="btn btn-icon btn-danger" onclick="confirmDeleteCategory(2)">
+              <span class="material-icons">delete</span>
+            </button>
+          </div>
+        </div>
+        <div class="category-stats">
+          <div class="category-stat">
+            <div class="category-stat-value">2</div>
+            <div class="category-stat-title">Enveloppes</div>
+          </div>
+          <div class="category-stat">
+            <div class="category-stat-value">350,00 €</div>
+            <div class="category-stat-title">Budget</div>
+          </div>
+          <div class="category-stat">
+            <div class="category-stat-value">214,00 €</div>
+            <div class="category-stat-title">Dépenses</div>
+          </div>
+          <div class="category-stat">
+            <div class="category-stat-value">136,00 €</div>
+            <div class="category-stat-title">Disponible</div>
+          </div>
+        </div>
+        <hr style="margin: 15px 0; border: none; border-top: 1px solid var(--light);">
+        <div class="envelopes-list">
+          <h4 style="margin-bottom: 10px;">Enveloppes dans cette catégorie:</h4>
+          <ul style="padding-left: 20px;">
+            <li>Carburant - 120,00 €</li>
+            <li>Transport en commun - 230,00 €</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="category-card">
+        <div class="category-header">
+          <h3 class="category-title">Loisirs</h3>
+          <div class="category-actions">
+            <button class="btn btn-icon" onclick="openModal('editCategoryModal')">
+              <span class="material-icons">edit</span>
+            </button>
+            <button class="btn btn-icon btn-danger" onclick="confirmDeleteCategory(3)">
+              <span class="material-icons">delete</span>
+            </button>
+          </div>
+        </div>
+        <div class="category-stats">
+          <div class="category-stat">
+            <div class="category-stat-value">2</div>
+            <div class="category-stat-title">Enveloppes</div>
+          </div>
+          <div class="category-stat">
+            <div class="category-stat-value">300,00 €</div>
+            <div class="category-stat-title">Budget</div>
+          </div>
+          <div class="category-stat">
+            <div class="category-stat-value">189,00 €</div>
+            <div class="category-stat-title">Dépenses</div>
+          </div>
+          <div class="category-stat">
+            <div class="category-stat-value">111,00 €</div>
+            <div class="category-stat-title">Disponible</div>
+          </div>
+        </div>
+        <hr style="margin: 15px 0; border: none; border-top: 1px solid var(--light);">
+        <div class="envelopes-list">
+          <h4 style="margin-bottom: 10px;">Enveloppes dans cette catégorie:</h4>
+          <ul style="padding-left: 20px;">
+            <li>Restaurants - 150,00 €</li>
+            <li>Cinéma & Sorties - 150,00 €</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="category-card">
+        <div class="category-header">
+          <h3 class="category-title">Santé</h3>
+          <div class="category-actions">
+            <button class="btn btn-icon" onclick="openModal('editCategoryModal')">
+              <span class="material-icons">edit</span>
+            </button>
+            <button class="btn btn-icon btn-danger" onclick="confirmDeleteCategory(4)">
+              <span class="material-icons">delete</span>
+            </button>
+          </div>
+        </div>
+        <div class="category-stats">
+          <div class="category-stat">
+            <div class="category-stat-value">1</div>
+            <div class="category-stat-title">Enveloppes</div>
+          </div>
+          <div class="category-stat">
+            <div class="category-stat-value">250,00 €</div>
+            <div class="category-stat-title">Budget</div>
+          </div>
+          <div class="category-stat">
+            <div class="category-stat-value">50,00 €</div>
+            <div class="category-stat-title">Dépenses</div>
+          </div>
+          <div class="category-stat">
+            <div class="category-stat-value">200,00 €</div>
+            <div class="category-stat-title">Disponible</div>
+          </div>
+        </div>
+        <hr style="margin: 15px 0; border: none; border-top: 1px solid var(--light);">
+        <div class="envelopes-list">
+          <h4 style="margin-bottom: 10px;">Enveloppes dans cette catégorie:</h4>
+          <ul style="padding-left: 20px;">
+            <li>Médical - 250,00 €</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal pour nouvelle catégorie -->
+  <div id="categoryModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Nouvelle catégorie</h2>
+        <button class="modal-close" onclick="closeModal('categoryModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="categoryName" class="form-label">Nom de la catégorie</label>
+          <input type="text" id="categoryName" class="form-control" placeholder="Ex: Maison, Loisirs, Transport...">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('categoryModal')">Annuler</button>
+        <button class="btn btn-primary">Créer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal pour modifier une catégorie -->
+  <div id="editCategoryModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Modifier la catégorie</h2>
+        <button class="modal-close" onclick="closeModal('editCategoryModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="editCategoryName" class="form-label">Nom de la catégorie</label>
+          <input type="text" id="editCategoryName" class="form-control" value="Nom de la catégorie actuelle">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('editCategoryModal')">Annuler</button>
+        <button class="btn btn-primary">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmation de suppression -->
+  <div id="deleteCategoryModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Confirmer la suppression</h2>
+        <button class="modal-close" onclick="closeModal('deleteCategoryModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Êtes-vous sûr de vouloir supprimer cette catégorie ? <br>
+           Les enveloppes associées seront conservées mais n'auront plus de catégorie.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('deleteCategoryModal')">Annuler</button>
+        <button class="btn btn-danger">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Fonctions pour les modals
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+    
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+    
+    function confirmDeleteCategory(id) {
+      openModal('deleteCategoryModal');
+    }
+  </script>
+</body>
+</html>

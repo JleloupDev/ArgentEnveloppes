@@ -1,0 +1,249 @@
+/* === Variables globales === */
+:root {
+  --primary: #4caf50;
+  --primary-dark: #388e3c;
+  --primary-light: #a5d6a7;
+  --secondary: #2196f3;
+  --warning: #ff9800;
+  --danger: #f44336;
+  --success: #4caf50;
+  --light: #f5f5f5;
+  --dark: #212121;
+  --gray: #9e9e9e;
+  --background: #f9f9f9;
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --radius: 8px;
+}
+
+/* === Style général === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--dark);
+  line-height: 1.6;
+}
+
+/* === Écran de chargement === */
+#loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--background);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.3s ease-out;
+}
+
+.loading-content {
+  text-align: center;
+}
+
+.logo {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 20px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--primary-light);
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* === Styles pour le contenu généré par Flutter === */
+.flutter-loader {
+  display: none;
+}
+
+/* Cacher l'écran de chargement une fois que Flutter est initialisé */
+.flutter-initialized #loading {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* === Navigation === */
+.navbar {
+  background-color: white;
+  box-shadow: var(--shadow);
+  padding: 15px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-link {
+  color: var(--dark);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+  padding: 5px 0;
+}
+
+.nav-link:hover {
+  color: var(--primary);
+}
+
+.nav-link.active {
+  color: var(--primary);
+  border-bottom: 2px solid var(--primary);
+}
+
+/* === Cartes et sections === */
+.card {
+  background-color: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.section-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+/* === Boutons === */
+.btn {
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+}
+
+.btn-outline:hover {
+  background-color: var(--primary-light);
+}
+
+/* === Pied de page === */
+.footer {
+  background-color: var(--primary);
+  color: white;
+  padding: 40px 0;
+  margin-top: auto;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.footer-logo {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.footer-links {
+  margin-bottom: 20px;
+}
+
+.footer-link {
+  color: white;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+.footer-copyright {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-top: 20px;
+}
+
+/* === Responsive Design === */
+@media (max-width: 768px) {
+  .logo, .footer-logo {
+    font-size: 22px;
+  }
+  
+  .nav-links {
+    display: none;
+  }
+  
+  .section-title {
+    font-size: 20px;
+  }
+  
+  .card {
+    padding: 15px;
+  }
+}
