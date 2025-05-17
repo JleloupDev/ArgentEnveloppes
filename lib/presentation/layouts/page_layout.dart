@@ -13,6 +13,7 @@ class PageLayout extends StatelessWidget {
   final List<Widget>? actions;
   final FloatingActionButton? floatingActionButton;
   final VoidCallback? onBackPressed;
+  final bool useScrollView; // Nouveau paramètre pour choisir entre les deux modes
 
   const PageLayout({
     super.key,
@@ -23,12 +24,41 @@ class PageLayout extends StatelessWidget {
     this.actions,
     this.floatingActionButton,
     this.onBackPressed,
+    this.useScrollView = true, // Par défaut, utiliser le ScrollView
   });
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isWebWide = kIsWeb && screenWidth > 768;
+
+    Widget contentWidget;
+    
+    if (useScrollView) {
+      // Mode avec défilement pour les pages standard
+      contentWidget = SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Container(
+          padding: isWebWide
+              ? EdgeInsets.symmetric(
+                  horizontal: max(0, (screenWidth - 1200) / 2),
+                  vertical: AppSizes.m,
+                )
+              : const EdgeInsets.all(AppSizes.m),
+          child: body,
+        ),
+      );
+    } else {
+      // Mode sans défilement pour les pages avec leur propre gestion de défilement
+      contentWidget = Container(
+        padding: isWebWide
+            ? EdgeInsets.symmetric(
+                horizontal: max(0, (screenWidth - 1200) / 2),
+              )
+            : EdgeInsets.zero,
+        child: body,
+      );
+    }
 
     return Scaffold(
       appBar: AppNavBar(
@@ -41,19 +71,9 @@ class PageLayout extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // Contenu principal avec défilement
+            // Contenu principal
             Expanded(
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: Container(                  padding: isWebWide
-                      ? EdgeInsets.symmetric(
-                          horizontal: max(0, (screenWidth - 1200) / 2),
-                          vertical: AppSizes.m,
-                        )
-                      : const EdgeInsets.all(AppSizes.m),
-                  child: body,
-                ),
-              ),
+              child: contentWidget,
             ),
             
             // Footer pour le web uniquement

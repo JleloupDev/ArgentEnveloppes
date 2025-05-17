@@ -230,12 +230,19 @@ class _CategoryManagementPageState extends ConsumerState<CategoryManagementPage>
               if (name.isNotEmpty) {
                 // Créer une nouvelle catégorie
                 final newCategory = Category(
-                  id: '', // L'id sera généré dans le repository
-                  name: name,
+                id: DateTime.now().millisecondsSinceEpoch.toString(),
+                name: name,
                 );
                 
-                // TODO: Appeler le usecase pour créer la catégorie
-                
+                try {
+                  ref.read(categoryProvider.notifier).addCategory(newCategory);
+                  // Succès
+                } catch (e) {
+                  // Afficher une notification d'erreur à l'utilisateur
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Erreur lors de la création de la catégorie'))
+                  );
+                }                
                 Navigator.pop(context);
               }
             },
@@ -246,75 +253,98 @@ class _CategoryManagementPageState extends ConsumerState<CategoryManagementPage>
     );
   }
 
-  void _showEditCategoryDialog(BuildContext context, Category category) {
-    final nameController = TextEditingController(text: category.name);
-    
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Modifier la catégorie'),
-        content: TextField(
-          controller: nameController,
-          decoration: const InputDecoration(
-            labelText: 'Nom de la catégorie',
-            border: OutlineInputBorder(),
-          ),
-          autofocus: true,
-          textCapitalization: TextCapitalization.sentences,
+// Remplacer la méthode _showEditCategoryDialog par:
+void _showEditCategoryDialog(BuildContext context, Category category) {
+  final nameController = TextEditingController(text: category.name);
+  
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Modifier la catégorie'),
+      content: TextField(
+        controller: nameController,
+        decoration: const InputDecoration(
+          labelText: 'Nom de la catégorie',
+          border: OutlineInputBorder(),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Annuler'),
-          ),
-          TextButton(
-            onPressed: () {
-              final name = nameController.text.trim();
-              if (name.isNotEmpty) {
-                // Mettre à jour la catégorie
-                final updatedCategory = Category(
-                  id: category.id,
-                  name: name,
+        autofocus: true,
+        textCapitalization: TextCapitalization.sentences,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Annuler'),
+        ),
+        TextButton(
+          onPressed: () {
+            final name = nameController.text.trim();
+            if (name.isNotEmpty) {
+              // Mettre à jour la catégorie
+              final updatedCategory = Category(
+                id: category.id,
+                name: name,
+              );
+              
+              // Mettre à jour la catégorie dans le state et la persistance
+              try {
+                ref.read(categoryProvider.notifier).updateCategory(updatedCategory);
+                // Succès
+              } catch (e) {
+                // Afficher une notification d'erreur à l'utilisateur
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Erreur lors de la mise à jour de la catégorie'))
                 );
-                
-                // TODO: Mettre à jour la catégorie dans le state
-                
-                Navigator.pop(context);
               }
-            },
-            child: const Text('Enregistrer'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showDeleteConfirmation(BuildContext context, Category category) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Supprimer la catégorie'),
-        content: Text(
-          'Voulez-vous vraiment supprimer la catégorie "${category.name}" ? '
-          'Les enveloppes associées seront déplacées vers la catégorie par défaut.'
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Annuler'),
-          ),
-          TextButton(
-            onPressed: () {
-              // TODO: Supprimer la catégorie
+              
               Navigator.pop(context);
-            },
-            style: TextButton.styleFrom(
-              foregroundColor: AppColors.error,
-            ),
-            child: const Text('Supprimer'),
-          ),
-        ],
+            }
+          },
+          child: const Text('Enregistrer'),
+        ),
+      ],
+    ),
+  );
+}
+
+void _showDeleteConfirmation(BuildContext context, Category category) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Supprimer la catégorie'),
+      content: Text(
+        'Voulez-vous vraiment supprimer la catégorie "${category.name}" ? '
+        'Les enveloppes associées seront déplacées vers la catégorie par défaut.'
       ),
-    );
-  }
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Annuler'),
+        ),
+        TextButton(
+          onPressed: () {
+            // Supprimer la catégorie et persister les changements
+              try {
+                ref.read(categoryProvider.notifier).removeCategory(category.id);
+                // Succès
+              } catch (e) {
+                // Afficher une notification d'erreur à l'utilisateur
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Erreur lors de la suppression de la catégorie'))
+                );
+              }            
+            // À faire: déplacer les enveloppes de cette catégorie vers la catégorie par défaut
+            // Vous pouvez ajouter cette logique ici ou dans un use case spécifique
+            
+            Navigator.pop(context);
+          },
+          style: TextButton.styleFrom(
+            foregroundColor: AppColors.error,
+          ),
+          child: const Text('Supprimer'),
+        ),
+      ],
+    ),
+  );
+}
+
 }
