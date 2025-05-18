@@ -8,6 +8,8 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton;
   final List<Widget>? actions;
   final VoidCallback? onBackPressed;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
 
   const AppNavBar({
     super.key,
@@ -16,13 +18,14 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.showBackButton = false,
     this.actions,
     this.onBackPressed,
+    this.backgroundColor,
+    this.foregroundColor,
   });
-
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.primary,
-      foregroundColor: AppColors.textLight,
+      backgroundColor: backgroundColor ?? AppColors.primary,
+      foregroundColor: foregroundColor ?? AppColors.textLight,
       elevation: 4,
       shadowColor: Colors.black26,
       title: Text(
@@ -42,8 +45,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
       bottom: kIsWeb ? _buildWebNavBar(context) : null,
     );
   }
-  
-  /// Barre de navigation web inspirée de la maquette
+    /// Barre de navigation web inspirée de la maquette
   PreferredSizeWidget? _buildWebNavBar(BuildContext context) {
     // Uniquement afficher pour les écrans web de taille suffisante
     if (!kIsWeb || MediaQuery.of(context).size.width < 600) {
@@ -54,7 +56,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
       preferredSize: const Size.fromHeight(48),
       child: Container(
         height: 48,
-        color: AppColors.primary,
+        color: backgroundColor ?? AppColors.primary,
         padding: const EdgeInsets.symmetric(horizontal: AppSizes.m),
         child: Row(
           children: [

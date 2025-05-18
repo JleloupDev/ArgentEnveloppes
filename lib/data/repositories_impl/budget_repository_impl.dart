@@ -496,4 +496,9 @@ class BudgetRepositoryImpl implements BudgetRepository {
       await _localDataSource.saveEnvelopes(envelopeModels);
     }
   }
+
+  @override
+  Future<void> clearAllData() async {
+    await _localDataSource.clearAllData();
+  }
 }

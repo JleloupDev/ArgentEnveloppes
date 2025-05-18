@@ -1,2 +1,3 @@
-2025/05/02-12:43:53.204 97f4 Creating DB C:\Users\jlelo\Downloads\Enveloppes\.vscode\chrome-debug-profile\Default\Sync Data\LevelDB since it was missing.
-2025/05/02-12:43:53.215 97f4 Reusing MANIFEST C:\Users\jlelo\Downloads\Enveloppes\.vscode\chrome-debug-profile\Default\Sync Data\LevelDB/MANIFEST-000001
+2025/05/02-12:44:25.049 9018 Reusing MANIFEST C:\Users\jlelo\Downloads\Enveloppes\.vscode\chrome-debug-profile\Default\Sync Data\LevelDB/MANIFEST-000001
+2025/05/02-12:44:25.052 9018 Recovering log #3
+2025/05/02-12:44:25.053 9018 Reusing old log C:\Users\jlelo\Downloads\Enveloppes\.vscode\chrome-debug-profile\Default\Sync Data\LevelDB/000003.log 

@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/utils/app_utils.dart';
 import '../../domain/entities/envelope.dart';
-import '../../domain/entities/transaction.dart';
-import '../providers/usecase_provider.dart';
 
 class EnvelopeCard extends ConsumerStatefulWidget {
   final Envelope envelope;
@@ -78,7 +76,7 @@ class _EnvelopeCardState extends ConsumerState<EnvelopeCard> {
                         borderRadius: BorderRadius.circular(AppSizes.s),
                       ),
                       child: Text(
-                        categoryName!,
+                        widget.categoryName!,
                         style: const TextStyle(
                           fontSize: 12,
                           color: AppColors.primaryDark,
@@ -114,13 +112,13 @@ class _EnvelopeCardState extends ConsumerState<EnvelopeCard> {
               ),
               
               // Bouton d'ajout de transaction rapide
-              if (onAddTransaction != null)
+              if (widget.onAddTransaction != null)
                 Align(
                   alignment: Alignment.centerRight,
                   child: Padding(
                     padding: const EdgeInsets.only(top: AppSizes.m),
                     child: OutlinedButton.icon(
-                      onPressed: onAddTransaction,
+                      onPressed: widget.onAddTransaction,
                       icon: const Icon(Icons.add, size: 16),
                       label: const Text('Ajouter une dépense'),
                       style: OutlinedButton.styleFrom(
@@ -142,7 +140,7 @@ class _EnvelopeCardState extends ConsumerState<EnvelopeCard> {
   }
 
   Widget _buildProgressBar() {
-    double percentage = envelope.budget > 0 ? envelope.spent / envelope.budget : 0;
+    double percentage = widget.envelope.budget > 0 ? widget.envelope.spent / widget.envelope.budget : 0;
     
     Color progressColor;
     if (percentage >= 0.8) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:math' show max;
 import '../../core/constants/app_constants.dart';
+import '../../core/constants/blue_theme.dart'; // Importer le thème bleu
 import '../widgets/app_nav_bar.dart';
 import '../widgets/app_footer.dart';
 
@@ -31,6 +32,7 @@ class PageLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isWebWide = kIsWeb && screenWidth > 768;
+    final isDashboard = currentNavIndex == 0; // Vérifier si c'est le tableau de bord
 
     Widget contentWidget;
     
@@ -45,6 +47,8 @@ class PageLayout extends StatelessWidget {
                   vertical: AppSizes.m,
                 )
               : const EdgeInsets.all(AppSizes.m),
+          // Utiliser une couleur de fond différente pour le tableau de bord
+          color: isDashboard ? BlueTheme.background : AppColors.background,
           child: body,
         ),
       );
@@ -56,10 +60,11 @@ class PageLayout extends StatelessWidget {
                 horizontal: max(0, (screenWidth - 1200) / 2),
               )
             : EdgeInsets.zero,
+        // Utiliser une couleur de fond différente pour le tableau de bord
+        color: isDashboard ? BlueTheme.background : AppColors.background,
         child: body,
       );
-    }
-
+    }    // Utiliser différentes couleurs selon que c'est le tableau de bord ou non
     return Scaffold(
       appBar: AppNavBar(
         title: title,
@@ -67,6 +72,8 @@ class PageLayout extends StatelessWidget {
         showBackButton: showBackButton,
         actions: actions,
         onBackPressed: onBackPressed,
+        // Utiliser une couleur différente pour la barre d'app du tableau de bord
+        backgroundColor: isDashboard ? BlueTheme.appBarBackground : AppColors.primary,
       ),
       body: SafeArea(
         child: Column(
@@ -82,7 +89,8 @@ class PageLayout extends StatelessWidget {
         ),
       ),
       floatingActionButton: floatingActionButton,
-      backgroundColor: AppColors.background,
+      // Appliquer la couleur de fond du thème bleu pour le dashboard
+      backgroundColor: isDashboard ? BlueTheme.background : AppColors.background,
     );
   }
 }

@@ -18,4 +18,7 @@ abstract class BudgetRepository {
 
   Future<void> backupToJson();
   Future<void> restoreFromJson(String filePath);
+  
+  /// Supprime toutes les données du stockage local
+  Future<void> clearAllData();
 }

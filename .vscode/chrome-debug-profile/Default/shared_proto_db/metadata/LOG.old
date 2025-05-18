@@ -1,2 +1,3 @@
-2025/05/02-12:43:53.443 8a9c Creating DB C:\Users\jlelo\Downloads\Enveloppes\.vscode\chrome-debug-profile\Default\shared_proto_db\metadata since it was missing.
-2025/05/02-12:43:53.758 8a9c Reusing MANIFEST C:\Users\jlelo\Downloads\Enveloppes\.vscode\chrome-debug-profile\Default\shared_proto_db\metadata/MANIFEST-000001
+2025/05/02-12:44:25.264 3f4c Reusing MANIFEST C:\Users\jlelo\Downloads\Enveloppes\.vscode\chrome-debug-profile\Default\shared_proto_db\metadata/MANIFEST-000001
+2025/05/02-12:44:25.265 3f4c Recovering log #3
+2025/05/02-12:44:25.265 3f4c Reusing old log C:\Users\jlelo\Downloads\Enveloppes\.vscode\chrome-debug-profile\Default\shared_proto_db\metadata/000003.log 

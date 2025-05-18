@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/utils/app_utils.dart';
+import '../../core/utils/color_generator.dart';
 import '../../domain/entities/category.dart';
 import '../../domain/entities/envelope.dart';
 import '../providers/envelope_provider.dart';
@@ -31,12 +32,32 @@ class CategoryCard extends ConsumerWidget {
     final totalBudget = categoryEnvelopes.fold<double>(0, (sum, e) => sum + e.budget);
     final totalSpent = categoryEnvelopes.fold<double>(0, (sum, e) => sum + e.spent);
     final remainingBudget = totalBudget - totalSpent;
+      // Obtenir une couleur unique pour cette catégorie
+    final categoryColor = ColorGenerator.getColorForId(category.id);
     
     return Card(
       elevation: 2,
       margin: const EdgeInsets.only(bottom: AppSizes.s),
-      child: Padding(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppSizes.borderRadius),
+        side: BorderSide(
+          color: categoryColor,
+          width: 2,
+        ),
+      ),
+      child: Container(
         padding: const EdgeInsets.all(AppSizes.m),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(AppSizes.borderRadius - 2),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              categoryColor.withOpacity(0.1),
+              Colors.white,
+            ],
+          ),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -45,13 +66,28 @@ class CategoryCard extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text(
-                    category.name,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    overflow: TextOverflow.ellipsis,
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 12,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          color: categoryColor,
+                          shape: BoxShape.circle,
+                        ),
+                        margin: const EdgeInsets.only(right: AppSizes.xs),
+                      ),
+                      Expanded(
+                        child: Text(
+                          category.name,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Row(
