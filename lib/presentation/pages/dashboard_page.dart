@@ -189,13 +189,13 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                     mainAxisSpacing: 16,
                     childAspectRatio: 1.2,
                   ),
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
+                  itemCount: categories.length,                  itemBuilder: (context, index) {
                     final category = categories[index];
                     return CategoryCard(
                       category: category,
                       onEdit: () => _showEditCategoryDialog(context, ref, category),
                       onDelete: () => _showDeleteConfirmation(context, ref, category),
+                      showGlobalStats: true, // Afficher les montants généraux
                     );
                   },
                 ),
