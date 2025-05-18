@@ -358,10 +358,10 @@ class CategoryCard extends ConsumerWidget {
       ),
     );
   }
-  
-  // Dialogue pour ajouter rapidement une transaction
+    // Dialogue pour ajouter rapidement une transaction
   void _showQuickAddDialog(BuildContext context, Envelope envelope) {
     final amountController = TextEditingController();
+    final commentController = TextEditingController();
     
     showDialog(
       context: context,
@@ -382,6 +382,16 @@ class CategoryCard extends ConsumerWidget {
                   prefixIcon: Icon(Icons.euro),
                 ),
                 autofocus: true,
+              ),
+              const SizedBox(height: AppSizes.m),
+              TextField(
+                controller: commentController,
+                decoration: const InputDecoration(
+                  labelText: 'Commentaire (optionnel)',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.comment),
+                ),
+                maxLines: 2,
               ),
             ],
           ),
@@ -404,14 +414,15 @@ class CategoryCard extends ConsumerWidget {
                           );
                           return;
                         }
-                        
-                        // Créer la nouvelle transaction
+                          // Récupérer le commentaire (s'il est fourni)
+                        final comment = commentController.text.trim();
+                          // Créer la nouvelle transaction
                         final newTransaction = Transaction(
                           id: DateTime.now().millisecondsSinceEpoch.toString(),
                           envelopeId: envelope.id,
                           amount: amount,
                           type: TransactionType.expense,
-                          description: 'Ajout rapide',
+                          comment: comment.isNotEmpty ? comment : 'Ajout rapide',
                           date: DateTime.now(),
                         );
                           // Utiliser le use case pour ajouter la transaction

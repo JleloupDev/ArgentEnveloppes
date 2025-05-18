@@ -65,13 +65,12 @@ class DemoData {
 
   /// Renvoie une liste de transactions de démonstration
   static List<Transaction> getTransactions() {
-    return [
-      Transaction(
+    return [      Transaction(
         id: '1',
         envelopeId: '1',
         amount: 45.0,
         type: TransactionType.expense,
-        description: 'Courses supermarché',
+        comment: 'Courses supermarché',
         date: DateTime.now().subtract(const Duration(days: 1)),
       ),
       Transaction(
@@ -79,7 +78,7 @@ class DemoData {
         envelopeId: '1',
         amount: 35.0,
         type: TransactionType.expense,
-        description: 'Marché',
+        comment: 'Marché',
         date: DateTime.now().subtract(const Duration(days: 3)),
       ),
       Transaction(
@@ -87,7 +86,7 @@ class DemoData {
         envelopeId: '2',
         amount: 65.0,
         type: TransactionType.expense,
-        description: 'Restaurant italien',
+        comment: 'Restaurant italien',
         date: DateTime.now().subtract(const Duration(days: 5)),
       ),
     ];

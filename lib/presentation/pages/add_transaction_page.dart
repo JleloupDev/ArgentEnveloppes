@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:uuid/uuid.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/utils/app_utils.dart';
 import '../../domain/entities/transaction.dart';
-import '../../domain/usecases/add_transaction.dart';
 import '../../domain/entities/envelope.dart';
 import '../providers/envelope_provider.dart';
-import '../layouts/page_layout.dart';
+import '../providers/usecase_provider.dart';
 
 class AddTransactionPage extends ConsumerStatefulWidget {
   final String envelopeId;
@@ -23,18 +21,17 @@ class AddTransactionPage extends ConsumerStatefulWidget {
 
 class _AddTransactionPageState extends ConsumerState<AddTransactionPage> {
   final _formKey = GlobalKey<FormState>();
-  final _descriptionController = TextEditingController();
   final _amountController = TextEditingController();
+  final _commentController = TextEditingController(); // Contrôleur pour le champ commentaire
   
   TransactionType _type = TransactionType.expense;
   DateTime _date = DateTime.now();
-
   @override
   void dispose() {
-    _descriptionController.dispose();
     _amountController.dispose();
+    _commentController.dispose(); // Libérer le contrôleur de commentaire
     super.dispose();
-  }  @override
+  }@override
   Widget build(BuildContext context) {
     // Récupérer l'enveloppe concernée
     final envelopes = ref.watch(envelopeProvider);
@@ -197,23 +194,17 @@ class _AddTransactionPageState extends ConsumerState<AddTransactionPage> {
                   return null;
                 },
               ),
+                const SizedBox(height: AppSizes.m),
               
-              const SizedBox(height: AppSizes.m),
-              
-              // Description
+              // Commentaire (optionnel)
               TextFormField(
-                controller: _descriptionController,
+                controller: _commentController,
                 decoration: const InputDecoration(
-                  labelText: 'Description',
-                  prefixIcon: Icon(Icons.description),
+                  labelText: 'Commentaire (optionnel)',
+                  prefixIcon: Icon(Icons.comment),
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez saisir une description';
-                  }
-                  return null;
-                },
+                maxLines: 2,
               ),
               
               const SizedBox(height: AppSizes.m),
@@ -290,37 +281,49 @@ class _AddTransactionPageState extends ConsumerState<AddTransactionPage> {
         _date = picked;
       });
     }
-  }
-
-  void _submitForm() {
+  }  Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      // TODO: Implémenter l'ajout de transaction via usecase
-      final amount = double.parse(_amountController.text);
-      final description = _descriptionController.text;
-      
-      final transaction = Transaction(
-        id: '', // L'ID sera généré dans le repository
-        envelopeId: widget.envelopeId,
-        amount: amount,
-        type: _type,
-        description: description,
-        date: _date,
-      );
-      
-      // TODO: Appeler le usecase pour ajouter la transaction
-      
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            _type == TransactionType.expense
-                ? 'Dépense ajoutée'
-                : 'Revenu ajouté',
-          ),
-          backgroundColor: AppColors.success,
-        ),
-      );
-      
-      Navigator.pop(context);
+      try {
+        final amount = double.parse(_amountController.text);
+        final comment = _commentController.text.trim();
+        
+        final transaction = Transaction(
+          id: '', // L'ID sera généré dans le repository
+          envelopeId: widget.envelopeId,
+          amount: amount,
+          type: _type,
+          comment: comment.isNotEmpty ? comment : null,
+          date: _date,
+        );
+        
+        // Appeler le usecase pour ajouter la transaction
+        final addTransaction = ref.read(addTransactionUseCaseProvider);
+        await addTransaction(transaction);
+        
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                _type == TransactionType.expense
+                    ? 'Dépense ajoutée'
+                    : 'Revenu ajouté',
+              ),
+              backgroundColor: AppColors.success,
+            ),
+          );
+          
+          Navigator.pop(context);
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Erreur lors de l\'ajout de la transaction'),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+      }
     }
   }
 }

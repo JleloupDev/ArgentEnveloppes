@@ -5,7 +5,7 @@ class Transaction {
   final String envelopeId;
   final double amount;
   final TransactionType type;
-  final String description;
+  final String? comment; // Commentaire sur la transaction
   final DateTime date;
 
   const Transaction({
@@ -13,7 +13,7 @@ class Transaction {
     required this.envelopeId,
     required this.amount,
     required this.type,
-    required this.description,
+    this.comment,
     required this.date,
   });
 

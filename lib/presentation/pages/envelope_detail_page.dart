@@ -373,10 +373,9 @@ Widget build(BuildContext context) {
   void _showDeleteTransactionConfirmation(BuildContext context, Transaction transaction) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Supprimer la transaction'),
+      builder: (context) => AlertDialog(        title: const Text('Supprimer la transaction'),
         content: Text(
-          'Voulez-vous vraiment supprimer la transaction "${transaction.description}" ?'
+          'Voulez-vous vraiment supprimer cette transaction${transaction.comment != null ? " : \"${transaction.comment}\"" : ""} ?'
         ),
         actions: [
           TextButton(

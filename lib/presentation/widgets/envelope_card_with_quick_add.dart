@@ -205,7 +205,6 @@ class _EnvelopeCardWithQuickAddState extends ConsumerState<EnvelopeCardWithQuick
       ),
     );
   }
-
   void _addQuickTransaction() async {
     final amountText = _amountController.text.trim();
     if (amountText.isEmpty) return;
@@ -220,14 +219,13 @@ class _EnvelopeCardWithQuickAddState extends ConsumerState<EnvelopeCardWithQuick
     
     setState(() => isLoading = true);
     
-    try {
-      // Création d'une transaction rapide (dépense uniquement)
+    try {      // Création d'une transaction rapide (dépense uniquement)
       final transaction = Transaction(
         id: '', // ID sera généré par le repository
         envelopeId: widget.envelope.id,
         amount: amount,
         type: TransactionType.expense,
-        description: 'Transaction rapide',
+        comment: 'Transaction rapide',
         date: DateTime.now(),
       );
       

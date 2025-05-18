@@ -55,8 +55,7 @@ class TestData {
       ),
     ];
   }
-  
-  /// Crée des transactions de test
+    /// Crée des transactions de test
   static List<Transaction> createTestTransactions() {
     final now = DateTime.now();
     
@@ -66,7 +65,7 @@ class TestData {
         envelopeId: 'env1',
         amount: 50,
         type: TransactionType.expense,
-        description: 'Courses au supermarché',
+        comment: 'Courses au supermarché',
         date: now.subtract(const Duration(days: 5)),
       ),
       Transaction(
@@ -74,7 +73,7 @@ class TestData {
         envelopeId: 'env1',
         amount: 70,
         type: TransactionType.expense,
-        description: 'Courses hebdomadaires',
+        comment: 'Courses hebdomadaires',
         date: now.subtract(const Duration(days: 3)),
       ),
       Transaction(
@@ -82,7 +81,7 @@ class TestData {
         envelopeId: 'env2',
         amount: 45,
         type: TransactionType.expense,
-        description: 'Restaurant avec des amis',
+        comment: 'Restaurant avec des amis',
         date: now.subtract(const Duration(days: 2)),
       ),
       Transaction(
@@ -90,7 +89,7 @@ class TestData {
         envelopeId: 'env3',
         amount: 800,
         type: TransactionType.expense,
-        description: 'Paiement du loyer',
+        comment: 'Paiement du loyer',
         date: now.subtract(const Duration(days: 10)),
       ),
       Transaction(
@@ -98,7 +97,7 @@ class TestData {
         envelopeId: 'env5',
         amount: 40,
         type: TransactionType.expense,
-        description: 'Plein d\'essence',
+        comment: 'Plein d\'essence',
         date: now.subtract(const Duration(days: 4)),
       ),
     ];

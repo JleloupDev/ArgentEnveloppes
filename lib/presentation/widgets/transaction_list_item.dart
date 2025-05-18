@@ -38,17 +38,15 @@ class TransactionListItem extends StatelessWidget {
                 color: isExpense ? AppColors.error : AppColors.success,
                 size: 20,
               ),
-            ),
+            ),            const SizedBox(width: AppSizes.m),
             
-            const SizedBox(width: AppSizes.m),
-            
-            // Description et date
+            // Commentaire et date
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    transaction.description,
+                    transaction.comment ?? 'Transaction sans description',
                     style: const TextStyle(
                       fontWeight: FontWeight.w500,
                     ),

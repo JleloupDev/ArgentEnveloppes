@@ -74,14 +74,13 @@ class BudgetRepositoryImpl implements BudgetRepository {
   Future<void> addTransaction(Transaction transaction) async {
     // Add the transaction
     final transactionModels = await _localDataSource.getTransactions();
-    
-    final newTransaction = transaction.id.isEmpty
+      final newTransaction = transaction.id.isEmpty
         ? TransactionModel.fromDomain(Transaction(
             id: _uuid.v4(),
             envelopeId: transaction.envelopeId,
             amount: transaction.amount,
             type: transaction.type,
-            description: transaction.description,
+            comment: transaction.comment,
             date: transaction.date,
           ))
         : TransactionModel.fromDomain(transaction);
@@ -175,16 +174,15 @@ class BudgetRepositoryImpl implements BudgetRepository {
     final envelopeFile = File('$path/argentveloppes_envelopes.csv');
     final envelopeString = const ListToCsvConverter().convert(envelopeRows);
     await envelopeFile.writeAsString(envelopeString);
-    
-    // Export transactions
+      // Export transactions
     final transactionRows = [
-      ['ID', 'Envelope ID', 'Amount', 'Type', 'Description', 'Date'],
+      ['ID', 'Envelope ID', 'Amount', 'Type', 'Comment', 'Date'],
       ...transactions.map((transaction) => [
             transaction.id,
             transaction.envelopeId,
             transaction.amount.toString(),
             transaction.type == TransactionType.expense ? 'expense' : 'income',
-            transaction.description,
+            transaction.comment ?? '',
             transaction.date.toIso8601String(),
           ]),
     ];
@@ -306,13 +304,12 @@ class BudgetRepositoryImpl implements BudgetRepository {
       } catch (e) {
         date = DateTime.now();
       }
-      
-      transactionsMap[id] = TransactionModel(
+        transactionsMap[id] = TransactionModel(
         id: id,
         envelopeId: envelopeId,
         amount: amount,
         type: typeStr == 'expense' ? 'expense' : 'income',
-        description: description,
+        comment: description, // CSV import uses description as comment
         date: date,
       );
     }
