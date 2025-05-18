@@ -8,10 +8,9 @@ import '../layouts/page_layout.dart';
 import '../providers/category_provider.dart';
 import '../providers/envelope_provider.dart';
 import '../providers/usecase_provider.dart';
-import '../router/app_router.dart';
-import '../widgets/category_card.dart';
 import '../widgets/dashboard_stats.dart';
-import '../widgets/envelope_card_with_quick_add.dart';
+import 'package:argentveloppes/presentation/widgets/category_card.dart';
+
 
 class DashboardPage extends ConsumerStatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -173,91 +172,28 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
             ),
             
             const SizedBox(height: AppSizes.m),
-            
-            // Liste des catégories
+              // Liste des catégories
             if (categories.isEmpty)
               _buildEmptyCategoriesState(context, ref)
-            else
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSizes.m),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 1.2,
-                  ),
-                  itemCount: categories.length,                  itemBuilder: (context, index) {
-                    final category = categories[index];
-                    return CategoryCard(
-                      category: category,
-                      onEdit: () => _showEditCategoryDialog(context, ref, category),
-                      onDelete: () => _showDeleteConfirmation(context, ref, category),
-                      showGlobalStats: true, // Afficher les montants généraux
-                    );
-                  },
-                ),
-              ),
-              
-            const SizedBox(height: AppSizes.xl),
-            
-            // Section Enveloppes récentes
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSizes.m),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Enveloppes récentes',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () => _showAddEnvelopeDialog(context, ref),
-                    icon: const Icon(Icons.add, size: 18),
-                    label: const Text('Nouvelle enveloppe'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.textLight,
-                      padding: const EdgeInsets.symmetric(horizontal: AppSizes.m),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            
-            const SizedBox(height: AppSizes.m),
-            
-            // Liste des enveloppes récentes
-            if (envelopes.isEmpty)
-              _buildEmptyEnvelopesState(context, ref)
             else
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSizes.m),
                 child: ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: envelopes.length > 4 ? 4 : envelopes.length, // Limiter à 4 enveloppes récentes
-                  itemBuilder: (context, index) {
-                    final envelope = envelopes[index];
-                    return EnvelopeCardWithQuickAdd(
-                      envelope: envelope,
-                      categoryName: categoryNames[envelope.id],
-                      onTap: () => Navigator.pushNamed(
-                        context,
-                        AppRouter.envelopeDetail,
-                        arguments: envelope.id,
-                      ),
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {                    final category = categories[index];
+                    // Use the CategoryCard widget from the widgets folder
+                    return CategoryCard(
+                      category: category,
+                      onEdit: () => _showEditCategoryDialog(context, ref, category),
+                      onDelete: () => _showDeleteConfirmation(context, ref, category), 
+                      onAddEnvelope: () => _showAddEnvelopeDialog(context, ref, initialCategoryId: category.id),
                     );
                   },
                 ),
               ),
-              
-            const SizedBox(height: AppSizes.xl),
+                const SizedBox(height: AppSizes.xl),
           ],
         ),
       ),
@@ -305,46 +241,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     );
   }
   
-  Widget _buildEmptyEnvelopesState(BuildContext context, WidgetRef ref) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppSizes.xl),
-        child: Column(
-          children: [
-            const Icon(
-              Icons.account_balance_wallet_outlined,
-              size: 64,
-              color: AppColors.grey,
-            ),
-            const SizedBox(height: AppSizes.m),
-            const Text(
-              'Aucune enveloppe',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: AppSizes.s),
-            const Text(
-              'Les enveloppes vous permettent de répartir votre budget sur différents postes de dépenses',
-              style: TextStyle(color: AppColors.grey),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppSizes.m),
-            ElevatedButton.icon(
-              onPressed: () => _showAddEnvelopeDialog(context, ref),
-              icon: const Icon(Icons.add),
-              label: const Text('Créer une enveloppe'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.textLight,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   // Dialogues pour l'ajout, la modification et la suppression des éléments
   
@@ -508,11 +404,10 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
       ),
     );
   }
-  
-  void _showAddEnvelopeDialog(BuildContext context, WidgetRef ref) {
+    void _showAddEnvelopeDialog(BuildContext context, WidgetRef ref, {String? initialCategoryId}) {
     final nameController = TextEditingController();
     final budgetController = TextEditingController();
-    String? selectedCategoryId;
+    String? selectedCategoryId = initialCategoryId;
     
     final categories = ref.read(categoryProvider);
     
