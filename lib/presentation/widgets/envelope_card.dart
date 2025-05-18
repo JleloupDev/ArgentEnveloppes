@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/app_constants.dart';
+import '../../core/constants/blue_theme.dart';
 import '../../core/utils/app_utils.dart';
 import '../../domain/entities/envelope.dart';
 
@@ -70,16 +71,15 @@ class _EnvelopeCardState extends ConsumerState<EnvelopeCard> {
                       padding: const EdgeInsets.symmetric(
                         horizontal: AppSizes.s,
                         vertical: AppSizes.xs,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryLight,
+                      ),                      decoration: BoxDecoration(
+                        color: BlueTheme.primaryLight,
                         borderRadius: BorderRadius.circular(AppSizes.s),
                       ),
                       child: Text(
                         widget.categoryName!,
                         style: const TextStyle(
                           fontSize: 12,
-                          color: AppColors.primaryDark,
+                          color: BlueTheme.primaryDark,
                         ),
                       ),
                     ),
@@ -96,17 +96,16 @@ class _EnvelopeCardState extends ConsumerState<EnvelopeCard> {
               // Montants
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildAmountDisplay(
+                children: [                  _buildAmountDisplay(
                     'Dépensé',
                     envelope.spent,
-                    envelope.spent > envelope.budget ? AppColors.error : null,
+                    envelope.spent > envelope.budget ? BlueTheme.error : null,
                   ),
                   _buildAmountDisplay('Budget', envelope.budget),
                   _buildAmountDisplay(
                     'Reste',
                     envelope.remaining,
-                    envelope.remaining < 0 ? AppColors.error : AppColors.success,
+                    envelope.remaining < 0 ? BlueTheme.error : BlueTheme.success,
                   ),
                 ],
               ),
@@ -120,10 +119,9 @@ class _EnvelopeCardState extends ConsumerState<EnvelopeCard> {
                     child: OutlinedButton.icon(
                       onPressed: widget.onAddTransaction,
                       icon: const Icon(Icons.add, size: 16),
-                      label: const Text('Ajouter une dépense'),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.primary,
-                        side: const BorderSide(color: AppColors.primary),
+                      label: const Text('Ajouter une dépense'),                      style: OutlinedButton.styleFrom(
+                        foregroundColor: BlueTheme.primary,
+                        side: const BorderSide(color: BlueTheme.primary),
                         padding: const EdgeInsets.symmetric(
                           horizontal: AppSizes.m,
                           vertical: AppSizes.s,
@@ -141,12 +139,11 @@ class _EnvelopeCardState extends ConsumerState<EnvelopeCard> {
 
   Widget _buildProgressBar() {
     double percentage = widget.envelope.budget > 0 ? widget.envelope.spent / widget.envelope.budget : 0;
-    
-    Color progressColor;
+      Color progressColor;
     if (percentage >= 0.8) {
-      progressColor = percentage >= 1 ? AppColors.error : AppColors.warning;
+      progressColor = percentage >= 1 ? BlueTheme.error : BlueTheme.warning;
     } else {
-      progressColor = AppColors.primary;
+      progressColor = BlueTheme.primary;
     }
     
     return Column(
@@ -156,7 +153,7 @@ class _EnvelopeCardState extends ConsumerState<EnvelopeCard> {
           borderRadius: BorderRadius.circular(AppSizes.borderRadius / 2),
           child: LinearProgressIndicator(
             value: percentage.clamp(0.0, 1.0),
-            backgroundColor: AppColors.primaryLight.withOpacity(0.3),
+            backgroundColor: BlueTheme.primaryLight.withOpacity(0.3),
             valueColor: AlwaysStoppedAnimation<Color>(progressColor),
             minHeight: 10,
           ),
@@ -169,11 +166,10 @@ class _EnvelopeCardState extends ConsumerState<EnvelopeCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
+        Text(          label,
+          style: TextStyle(
             fontSize: 12,
-            color: AppColors.grey,
+            color: BlueTheme.textDark.withOpacity(0.6),
           ),
         ),
         Text(

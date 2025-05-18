@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 import '../pages/dashboard_page.dart';
-import '../pages/category_management_page.dart';
 import '../pages/envelope_detail_page.dart';
 import '../pages/add_transaction_page.dart';
 
 /// Classe pour gérer la navigation web
 class AppRouter {  /// Routes principales de l'application
   static const String dashboard = '/';
-  static const String categories = '/categories';
-  static const String envelopes = '/envelopes';
+  // Catégories et Enveloppes supprimés
   static const String envelopeDetail = '/envelope';
   static const String addTransaction = '/transaction/add';
-  
-  /// Génère les routes pour la navigation
+    /// Génère les routes pour la navigation
   static Map<String, Widget Function(BuildContext)> getRoutes() {
     return {
       dashboard: (context) => const DashboardPage(),
-      categories: (context) => const CategoryManagementPage(),
-      // La page envelope sera gérée par onGenerateRoute car elle a besoin d'un paramètre
+      // Les autres pages ont été supprimées
+      // La page envelope détail sera gérée par onGenerateRoute car elle a besoin d'un paramètre
     };
   }
     /// Gère la génération dynamique des routes avec des paramètres

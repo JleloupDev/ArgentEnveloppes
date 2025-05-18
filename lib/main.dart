@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/constants/app_constants.dart';
+import 'core/constants/blue_theme.dart';  // Import du thème bleu
 import 'data/datasources/local_storage_datasource.dart';
 import 'data/repositories_impl/budget_repository_impl.dart';
 import 'domain/repositories/budget_repository.dart';
@@ -38,15 +39,14 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: AppRouter.dashboard,
       routes: AppRouter.getRoutes(),
-      onGenerateRoute: AppRouter.onGenerateRoute,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
+      onGenerateRoute: AppRouter.onGenerateRoute,      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: BlueTheme.primary),
         useMaterial3: true,
         appBarTheme: const AppBarTheme(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.textLight,
+          backgroundColor: BlueTheme.appBarBackground,
+          foregroundColor: BlueTheme.textLight,
         ),
-        scaffoldBackgroundColor: AppColors.background,
+        scaffoldBackgroundColor: BlueTheme.background,
         inputDecorationTheme: InputDecorationTheme(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(AppSizes.borderRadius),
@@ -55,14 +55,19 @@ class MyApp extends ConsumerWidget {
             horizontal: AppSizes.m,
             vertical: AppSizes.m,
           ),
-          fillColor: AppColors.surface,
-          filled: true,        ),
+          fillColor: BlueTheme.cardBackground,
+          filled: true,
+        ),
         cardTheme: CardTheme(
-          color: AppColors.surface,
+          color: BlueTheme.cardBackground,
           elevation: AppSizes.cardElevation,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppSizes.borderRadius),
-          ),        ),
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: BlueTheme.primaryButtonStyle,
+        ),
       ),
     );
   }

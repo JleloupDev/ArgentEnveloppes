@@ -51,8 +51,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     if (!kIsWeb || MediaQuery.of(context).size.width < 600) {
       return null;
     }
-    
-    return PreferredSize(
+      return PreferredSize(
       preferredSize: const Size.fromHeight(48),
       child: Container(
         height: 48,
@@ -61,8 +60,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
         child: Row(
           children: [
             _buildNavItem(context, 'Tableau de bord', 0, '/'),
-            _buildNavItem(context, 'Catégories', 1, '/categories'),
-            _buildNavItem(context, 'Enveloppes', 2, '/envelopes'),
+            // Pages de catégories et enveloppes supprimées
           ],
         ),
       ),

@@ -74,17 +74,28 @@ class PageLayout extends StatelessWidget {
         onBackPressed: onBackPressed,
         // Utiliser une couleur différente pour la barre d'app du tableau de bord
         backgroundColor: isDashboard ? BlueTheme.appBarBackground : AppColors.primary,
-      ),
-      body: SafeArea(
-        child: Column(
+      ),      body: SafeArea(
+        child: Stack(
           children: [
             // Contenu principal
-            Expanded(
-              child: contentWidget,
+            Column(
+              children: [
+                Expanded(
+                  child: contentWidget,
+                ),
+                // Espacement pour le footer
+                if (kIsWeb) const SizedBox(height: 40),
+              ],
             ),
             
-            // Footer pour le web uniquement
-            const AppFooter(),
+            // Footer en position absolue en bas (uniquement pour le web)
+            if (kIsWeb)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: const AppFooter(),
+              ),
           ],
         ),
       ),
