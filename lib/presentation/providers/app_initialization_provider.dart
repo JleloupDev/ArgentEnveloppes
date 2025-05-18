@@ -1,6 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/entities/category.dart';
-import '../../domain/entities/envelope.dart';
 import '../providers/category_provider.dart';
 import '../providers/envelope_provider.dart';
 import '../providers/usecase_provider.dart';

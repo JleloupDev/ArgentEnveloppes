@@ -1,8 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/category.dart';
-import '../../domain/repositories/budget_repository.dart';
 import '../providers/usecase_provider.dart';
-import '../../domain/usecases/get_categories.dart'; // Vous devrez créer ce use case
 
 // Provider pour obtenir les catégories via un use case
 final categoriesProvider = FutureProvider<List<Category>>((ref) {
