@@ -42,10 +42,27 @@ jobs:
       # Étape 7: Compiler l'application pour le web
       - name: Build web
         run: flutter build web --release --base-href "/ArgentEnveloppes/"
-      
-      # Étape 8: Ajouter le fichier .nojekyll pour désactiver Jekyll sur GitHub Pages
+        # Étape 8: Ajouter le fichier .nojekyll pour désactiver Jekyll sur GitHub Pages
       - name: Add .nojekyll file
         run: touch build/web/.nojekyll
+
+      # Étape 8.1: S'assurer que styles.css existe et est bien placé
+      - name: Check and copy styles.css
+        run: |
+          if [ -f "styles.css" ]; then
+            cp styles.css build/web/
+            echo "Copied existing styles.css to build/web/"
+          else
+            echo "/* Default styles for ArgentEnveloppes app */" > build/web/styles.css
+            echo "Created default styles.css in build/web/"
+          fi
+          
+          # Vérifier que le fichier existe dans le répertoire de build
+          if [ -f "build/web/styles.css" ]; then
+            echo "styles.css is present in build/web directory"
+          else
+            echo "WARNING: styles.css is still missing!"
+          fi
 
       # Étape 9: Ajouter le fichier 404.html pour la gestion des routes
       - name: Create 404.html
