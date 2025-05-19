@@ -1,0 +1,56 @@
+# Fichiers et dossiers Flutter/Dart
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+.metadata
+.idea/
+*.iml
+*.lock
+
+# Pour les utilisateurs de macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Pour les utilisateurs de Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Environnement de développement Flutter
+.vscode/
+.idea/
+*.log
+*.iml
+.project
+.classpath
+.settings/
+
+# Fichiers générés pour les applications Android et iOS
+/android/app/debug/
+/android/app/profile/
+/android/app/release/
+/ios/Flutter/App.framework
+/ios/Flutter/Flutter.framework
+/ios/Flutter/Flutter.podspec
+/ios/Flutter/Generated.xcconfig
+/ios/Flutter/app.flx
+/ios/Flutter/app.zip
+/ios/Flutter/flutter_assets/
+/ios/ServiceDefinitions.json
+/ios/Runner/GeneratedPluginRegistrant.*
+
+# Fichiers spécifiques au système d'exploitation
+.DS_Store
+Thumbs.db
+
+# Ne pas ignorer le dossier build/web car nous le gardons pour déployer manuellement
+!build/web/

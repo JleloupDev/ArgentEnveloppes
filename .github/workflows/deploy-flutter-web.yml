@@ -1,0 +1,76 @@
+name: Deploy Flutter Web App
+
+# Définition du déclencheur - exécution du workflow lors d'un push sur la branche main
+on:
+  push:
+    branches: [ main ]
+  # Permet de lancer manuellement le workflow depuis l'interface GitHub
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Étape 1: Récupérer le code source
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Étape 2: Configurer Flutter
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.x'
+          channel: 'stable'
+
+      # Étape 3: Afficher la version de Flutter pour le débogage
+      - name: Flutter version
+        run: flutter --version
+
+      # Étape 4: Installer les dépendances
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Étape 5: Analyser le code pour détecter les problèmes
+      - name: Analyze code
+        run: flutter analyze --no-fatal-infos
+
+      # Étape 6: Exécuter les tests
+      - name: Run tests
+        run: flutter test
+
+      # Étape 7: Compiler l'application pour le web
+      - name: Build web
+        run: flutter build web --release --base-href "/ArgentEnveloppes/"
+      
+      # Étape 8: Ajouter le fichier .nojekyll pour désactiver Jekyll sur GitHub Pages
+      - name: Add .nojekyll file
+        run: touch build/web/.nojekyll
+
+      # Étape 9: Ajouter le fichier 404.html pour la gestion des routes
+      - name: Create 404.html
+        run: |
+          cat > build/web/404.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="refresh" content="0;url=/ArgentEnveloppes/">
+            <script>
+              window.location.href = '/ArgentEnveloppes/' + window.location.pathname.replace('/ArgentEnveloppes/', '');
+            </script>
+            <title>Page Redirect</title>
+          </head>
+          <body>
+            Si vous n'êtes pas redirigé automatiquement, cliquez <a href="/ArgentEnveloppes/">ici</a>.
+          </body>
+          </html>
+          EOF
+
+      # Étape 10: Déployer sur GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
+          force_orphan: true  # Force la création d'une nouvelle branche orpheline (sans historique)
