@@ -13,13 +13,13 @@ Cette application est configurée pour être automatiquement déployée sur GitH
    - Un push est effectué sur la branche `main`
    - Le workflow est lancé manuellement depuis l'interface GitHub (via "Actions")
 
-3. **Étapes du workflow**:
-   - Récupération du code source
+3. **Étapes du workflow**:   - Récupération du code source
    - Installation de Flutter
    - Installation des dépendances
    - Analyse du code
    - Exécution des tests
    - Compilation de l'application pour le web
+   - Copie des fichiers statiques requis (`styles.css`, `flutter_bootstrap.js`, `script.js`, `favicon.png`, `icons/Icon-192.png`)
    - Configuration pour GitHub Pages (ajout des fichiers `.nojekyll` et `404.html`)
    - Déploiement sur la branche `gh-pages`
 
@@ -36,6 +36,18 @@ Pour activer le déploiement GitHub Pages:
 4. Sélectionner la branche `gh-pages` et le dossier `/ (root)`
 5. Cliquer sur "Save"
 
+### Fichiers statiques importants
+
+L'application nécessite les fichiers statiques suivants pour fonctionner correctement :
+
+- `styles.css` - Styles CSS personnalisés pour l'application
+- `flutter_bootstrap.js` - Script d'initialisation de Flutter pour le web
+- `script.js` - Scripts personnalisés pour l'application
+- `favicon.png` - Favicon du site web
+- `icons/Icon-192.png` - Icône pour les installations sur mobile
+
+Le workflow de déploiement automatique copie automatiquement ces fichiers vers le répertoire de build. Si vous rencontrez des erreurs 404 pour ces fichiers, assurez-vous qu'ils existent à la racine de votre projet et que le workflow les copie correctement.
+
 ### Déploiement manuel
 
 Si vous préférez déployer manuellement:
@@ -46,6 +58,11 @@ flutter build web --release --base-href "/ArgentEnveloppes/"
 
 # Ajouter les fichiers nécessaires
 touch build/web/.nojekyll
+
+# Copier les fichiers statiques importants
+cp styles.css flutter_bootstrap.js script.js favicon.png build/web/
+mkdir -p build/web/icons
+cp icons/Icon-192.png build/web/icons/
 
 # Créer la branche gh-pages et pousser les fichiers
 git checkout --orphan gh-pages

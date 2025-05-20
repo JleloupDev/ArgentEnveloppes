@@ -44,11 +44,10 @@ jobs:
         run: flutter build web --release --base-href "/ArgentEnveloppes/"
         # Étape 8: Ajouter le fichier .nojekyll pour désactiver Jekyll sur GitHub Pages
       - name: Add .nojekyll file
-        run: touch build/web/.nojekyll
-
-      # Étape 8.1: S'assurer que styles.css existe et est bien placé
-      - name: Check and copy styles.css
+        run: touch build/web/.nojekyll      # Étape 8.1: Copier tous les fichiers statiques nécessaires dans le répertoire de build
+      - name: Copy required static files to build directory
         run: |
+          # Copier styles.css
           if [ -f "styles.css" ]; then
             cp styles.css build/web/
             echo "Copied existing styles.css to build/web/"
@@ -57,12 +56,50 @@ jobs:
             echo "Created default styles.css in build/web/"
           fi
           
-          # Vérifier que le fichier existe dans le répertoire de build
-          if [ -f "build/web/styles.css" ]; then
-            echo "styles.css is present in build/web directory"
+          # Copier flutter_bootstrap.js
+          if [ -f "flutter_bootstrap.js" ]; then
+            cp flutter_bootstrap.js build/web/
+            echo "Copied flutter_bootstrap.js to build/web/"
           else
-            echo "WARNING: styles.css is still missing!"
+            echo "WARNING: flutter_bootstrap.js not found!"
           fi
+          
+          # Copier script.js
+          if [ -f "script.js" ]; then
+            cp script.js build/web/
+            echo "Copied script.js to build/web/"
+          else
+            echo "WARNING: script.js not found!"
+          fi
+          
+          # Copier favicon.png
+          if [ -f "favicon.png" ]; then
+            cp favicon.png build/web/
+            echo "Copied favicon.png to build/web/"
+          else
+            echo "WARNING: favicon.png not found!"
+          fi
+          
+          # Créer le répertoire icons dans build/web s'il n'existe pas
+          mkdir -p build/web/icons
+          
+          # Copier Icon-192.png
+          if [ -f "icons/Icon-192.png" ]; then
+            cp icons/Icon-192.png build/web/icons/
+            echo "Copied Icon-192.png to build/web/icons/"
+          else
+            echo "WARNING: icons/Icon-192.png not found!"
+          fi
+          
+          # Vérifier que tous les fichiers ont été copiés
+          echo "Checking if all files were copied successfully:"
+          for file in "styles.css" "flutter_bootstrap.js" "script.js" "favicon.png" "icons/Icon-192.png"; do
+            if [ -f "build/web/$file" ]; then
+              echo "✓ $file is present in build/web directory"
+            else
+              echo "✗ $file is missing in build/web directory!"
+            fi
+          done
 
       # Étape 9: Ajouter le fichier 404.html pour la gestion des routes
       - name: Create 404.html
