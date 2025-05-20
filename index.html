@@ -53,6 +53,25 @@
 
   <!-- Application Flutter -->
   <script src="flutter_bootstrap.js" async></script>
+    <!-- Firebase Web SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  
+  <!-- Script pour initialiser Firebase (à remplacer par vos propres clés Firebase) -->
+  <script>
+    // Votre configuration Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtu1xB90m8T3IGOO__IaocA6oe-S2ScRg",
+      authDomain: "argentenveloppes.firebaseapp.com",
+      projectId: "argentenveloppes",
+      storageBucket: "argentenveloppes.firebasestorage.app",
+      messagingSenderId: "567037479335",
+      appId: "1:567037479335:web:9881438142f5a0a6860e82"
+    };
+
+    // Initialiser Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
   
   <!-- Script personnalisé -->
   <script src="script.js"></script>
@@ -66,3 +85,5 @@
   </div>
 </body>
 </html>
+
+

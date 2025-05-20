@@ -2,6 +2,50 @@
 
 Application de gestion de budget personnel utilisant la méthode des enveloppes budgétaires.
 
+## Configuration Firebase pour l'authentification
+
+Pour que l'authentification fonctionne correctement, vous devez configurer Firebase pour votre projet. Suivez ces étapes :
+
+### 1. Créer un projet Firebase
+
+1. Rendez-vous sur [Firebase Console](https://console.firebase.google.com/)
+2. Cliquez sur "Ajouter un projet"
+3. Suivez les instructions pour créer un nouveau projet
+
+### 2. Ajouter Firebase à votre application
+
+#### Option 1 : Utiliser FlutterFire CLI (recommandé)
+
+1. Installez FlutterFire CLI :
+   ```bash
+   dart pub global activate flutterfire_cli
+   ```
+
+2. Exécutez la commande de configuration :
+   ```bash
+   flutterfire configure --project=your-firebase-project-id
+   ```
+
+3. Suivez les instructions pour sélectionner les plateformes (Android, iOS, Web)
+
+#### Option 2 : Configuration manuelle
+
+1. Dans Firebase Console, ajoutez une application pour chaque plateforme (Android, iOS, Web)
+2. Téléchargez les fichiers de configuration
+3. Mettez à jour le fichier `lib/firebase_options.dart` avec vos clés API
+
+### 3. Activer l'authentification Firebase
+
+1. Dans Firebase Console, allez dans "Authentication"
+2. Activez les méthodes d'authentification :
+   - Email/Mot de passe
+   - Google Sign-In
+
+### 4. Configuration pour GitHub Pages
+
+1. Dans Firebase Console > Authentication > Settings > Authorized domains
+2. Ajoutez votre domaine GitHub Pages (par exemple : `username.github.io`)
+
 ## Déploiement automatisé via GitHub Actions
 
 Cette application est configurée pour être automatiquement déployée sur GitHub Pages à chaque push sur la branche principale (`main`).

@@ -1,0 +1,29 @@
+name: argentenveloppes
+description: Application de gestion de budget personnel utilisant la méthode des enveloppes budgétaires.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.5
+  riverpod: ^2.3.6
+  flutter_riverpod: ^2.3.6
+  firebase_core: ^2.32.0 # Mise à jour
+  firebase_auth: ^4.20.0 # Mise à jour
+  google_sign_in: ^6.2.1 # Mise à jour
+  cloud_firestore: ^4.17.3 # Mise à jour
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.1
+  mockito: ^5.4.0
+  build_runner: ^2.3.3
+
+flutter:
+  uses-material-design: true
+
