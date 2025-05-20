@@ -37,11 +37,32 @@ jobs:
 
       # Étape 6: Exécuter les tests
       - name: Run tests
-        run: flutter test
+        run: flutter test      # Étape 7: Configurer les variables d'environnement Firebase
+      - name: Setup Firebase Environment Variables
+        env:
+          FIREBASE_WEB_API_KEY: ${{ secrets.FIREBASE_WEB_API_KEY }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          FIREBASE_WEB_APP_ID: ${{ secrets.FIREBASE_WEB_APP_ID }}
+        run: |
+          # Remplacer les valeurs fictives dans firebase_options.dart
+          if [ -n "$FIREBASE_WEB_API_KEY" ]; then
+            sed -i "s/apiKey: 'YOUR_WEB_API_KEY'/apiKey: '$FIREBASE_WEB_API_KEY'/g" lib/firebase_options.dart
+            sed -i "s/projectId: 'YOUR_PROJECT_ID'/projectId: '$FIREBASE_PROJECT_ID'/g" lib/firebase_options.dart
+            sed -i "s/authDomain: 'YOUR_AUTH_DOMAIN'/authDomain: '$FIREBASE_AUTH_DOMAIN'/g" lib/firebase_options.dart
+            sed -i "s/storageBucket: 'YOUR_STORAGE_BUCKET'/storageBucket: '$FIREBASE_STORAGE_BUCKET'/g" lib/firebase_options.dart
+            sed -i "s/messagingSenderId: 'YOUR_WEB_MESSAGING_SENDER_ID'/messagingSenderId: '$FIREBASE_MESSAGING_SENDER_ID'/g" lib/firebase_options.dart
+            sed -i "s/appId: 'YOUR_WEB_APP_ID'/appId: '$FIREBASE_WEB_APP_ID'/g" lib/firebase_options.dart
+            echo "Firebase configuration updated in lib/firebase_options.dart"
+          else
+            echo "WARNING: Firebase configuration secrets not set. Using placeholder values."
+          fi
 
-      # Étape 7: Compiler l'application pour le web
+      # Étape 8: Compiler l'application pour le web
       - name: Build web
-        run: flutter build web --release --base-href "/ArgentEnveloppes/"
+        run: flutter build web --release --web-renderer canvaskit --base-href "/ArgentEnveloppes/"
         # Étape 8: Ajouter le fichier .nojekyll pour désactiver Jekyll sur GitHub Pages
       - name: Add .nojekyll file
         run: touch build/web/.nojekyll      # Étape 8.1: Copier tous les fichiers statiques nécessaires dans le répertoire de build
@@ -119,9 +140,43 @@ jobs:
             Si vous n'êtes pas redirigé automatiquement, cliquez <a href="/ArgentEnveloppes/">ici</a>.
           </body>
           </html>
-          EOF
+          EOF      # Étape 10: Mettre à jour le fichier index.html avec la configuration Firebase
+      - name: Update index.html with Firebase configuration
+        env:
+          FIREBASE_WEB_API_KEY: ${{ secrets.FIREBASE_WEB_API_KEY }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          FIREBASE_WEB_APP_ID: ${{ secrets.FIREBASE_WEB_APP_ID }}
+        run: |
+          if [ -n "$FIREBASE_WEB_API_KEY" ]; then
+            # Créer un script temporaire pour remplacer la configuration Firebase
+            cat > replace_config.js << EOF
+            const fs = require('fs');
+            const path = 'build/web/index.html';
+            let content = fs.readFileSync(path, 'utf8');
+            const config = {
+              apiKey: "$FIREBASE_WEB_API_KEY",
+              authDomain: "$FIREBASE_AUTH_DOMAIN",
+              projectId: "$FIREBASE_PROJECT_ID",
+              storageBucket: "$FIREBASE_STORAGE_BUCKET",
+              messagingSenderId: "$FIREBASE_MESSAGING_SENDER_ID",
+              appId: "$FIREBASE_WEB_APP_ID"
+            };
+            const configString = JSON.stringify(config, null, 6).replace(/"/g, "'").replace(/^{/, '').replace(/}$/, '');
+            content = content.replace(/const firebaseConfig = \{[\s\S]*?\};/m, "const firebaseConfig = {" + configString + "};");
+            fs.writeFileSync(path, content);
+            console.log('Firebase config updated in index.html');
+            EOF
+            
+            # Exécuter le script
+            node replace_config.js
+          else
+            echo "WARNING: Firebase configuration secrets not set. Using placeholder values in index.html."
+          fi
 
-      # Étape 10: Déployer sur GitHub Pages
+      # Étape 11: Déployer sur GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
