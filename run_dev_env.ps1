@@ -11,63 +11,74 @@ param (
 # Aller au répertoire du projet (si le script n'est pas déjà exécuté depuis là)
 Set-Location -Path $PSScriptRoot
 
-Write-Host "Valeur de \$LASTEXITCODE avant de réinitialiser: $LASTEXITCODE"
-# Exécuter une commande externe simple pour s'assurer que $LASTEXITCODE est réinitialisé à 0
-cmd /c "exit 0"
-Write-Host "Valeur de \$LASTEXITCODE après réinitialisation (devrait être 0): $LASTEXITCODE"
-
-Write-Host "Étape 1: Application de la configuration Firebase pour l'environnement '$Environment'..."
-# Capturer toutes les sorties (standard, erreur, warning, etc.) et vérifier le succès
-$applyConfigOutput = $(./apply_firebase_config.ps1 -Environment $Environment *>&1)
-$applyConfigSuccess = $?
-$applyConfigExitCode = $LASTEXITCODE
-
-Write-Host "--- Début de la sortie de apply_firebase_config.ps1 ---"
-if ($applyConfigOutput) {
-    Write-Host $applyConfigOutput
-} else {
-    Write-Host "(Aucune sortie standard ou d'erreur capturée de apply_firebase_config.ps1)"
+Write-Host "Étape 1: Chargement de la configuration d'environnement depuis .env.$Environment.ps1..."
+$envFilePath = ".\env.$Environment.ps1"
+if (-not (Test-Path $envFilePath)) {
+    Write-Error "Fichier de configuration d'environnement $envFilePath non trouvé. Arrêt du script."
+    exit 1
 }
-Write-Host "--- Fin de la sortie de apply_firebase_config.ps1 ---"
-Write-Host "Status de succès de apply_firebase_config.ps1 (\$?): $applyConfigSuccess"
-Write-Host "Code de sortie de apply_firebase_config.ps1 (\$LASTEXITCODE): $applyConfigExitCode"
 
-# Vérifier si la commande précédente a réussi
-# Une commande PowerShell réussie met $? à $true.
-# Un script qui utilise 'exit <non-zero>' mettra $LASTEXITCODE à <non-zero> et $? à $false.
-if (-not $applyConfigSuccess -or ($applyConfigExitCode -ne 0 -and $null -ne $applyConfigExitCode)) {
-    Write-Error "Erreur lors de l'application de la configuration Firebase (Succès: $applyConfigSuccess, ExitCode: $applyConfigExitCode). Voir la sortie ci-dessus. Arrêt du script."
-    # Tenter de sortir avec le même code d'erreur si disponible et non nul, sinon 1.
-    if ($applyConfigExitCode -ne 0 -and $null -ne $applyConfigExitCode) {
-        exit $applyConfigExitCode
+# Exécute le script .env pour charger les variables dans la session COURANTE
+. $envFilePath
+Write-Host "Configuration $Environment chargée."
+
+$dartDefineArgs = [System.Collections.Generic.List[string]]::new()
+
+# Clés à lire depuis l'environnement et à passer en --dart-define
+# Assurez-vous que ces variables sont bien définies par $Env:MA_VARIABLE = "valeur" dans le .env.*.ps1
+$keysToDefine = @(
+    "FIREBASE_WEB_API_KEY",
+    "FIREBASE_AUTH_DOMAIN",
+    "FIREBASE_PROJECT_ID",
+    "FIREBASE_STORAGE_BUCKET",
+    "FIREBASE_MESSAGING_SENDER_ID",
+    "FIREBASE_WEB_APP_ID",
+    "FIREBASE_MEASUREMENT_ID",
+    "FIREBASE_WEB_CLIENT_ID"
+)
+
+foreach ($key in $keysToDefine) {
+    $value = (Get-Item "Env:$key" -ErrorAction SilentlyContinue).Value
+    if ($null -ne $value -and $value -ne "") {
+        $dartDefineArgs.Add("--dart-define=$key=$value")
     } else {
-        exit 1
+        Write-Warning "La variable d'environnement $key n'est pas définie ou est vide."
     }
 }
+
+# Vérifier si FIREBASE_WEB_CLIENT_ID est défini, car il est critique
+$webClientIdDefined = $dartDefineArgs | Where-Object { $_ -like "*FIREBASE_WEB_CLIENT_ID*" }
+if (-not $webClientIdDefined) {
+    Write-Warning "FIREBASE_WEB_CLIENT_ID n'est pas défini via --dart-define. Google Sign-In sur le Web pourrait ne pas fonctionner."
+}
+
 
 if (-not $SkipRestore) {
     Write-Host "Étape 2: Nettoyage du projet Flutter..."
     flutter clean
-
-    # Vérifier si la commande précédente a réussi
     if ($LASTEXITCODE -ne 0) {
-        Write-Error "Erreur lors du 'flutter clean'. Arrêt du script."
+        Write-Error "Erreur lors de 'flutter clean'."
         exit $LASTEXITCODE
     }
 
     Write-Host "Étape 3: Récupération des dépendances Flutter..."
     flutter pub get
-
-    # Vérifier si la commande précédente a réussi
     if ($LASTEXITCODE -ne 0) {
-        Write-Error "Erreur lors du 'flutter pub get'. Arrêt du script."
+        Write-Error "Erreur lors de 'flutter pub get'."
         exit $LASTEXITCODE
     }
 } else {
-    Write-Host "Étapes 2 & 3 (Nettoyage et Récupération des dépendances) sautées."
+    Write-Host "Étapes 2 & 3 ignorées."
 }
 
-Write-Host "Étape 4: Lancement de l'application en mode développement (Chrome avec rendu HTML)..."
-flutter run -d chrome
+Write-Host "Étape 4: Lancement de l'application Flutter..."
+$finalDartDefines = $dartDefineArgs -join " "
+Write-Host "Commande: flutter run -d chrome --web-renderer html $finalDartDefines"
+flutter run -d chrome --web-renderer html @dartDefineArgs # Splatting pour les arguments
 
-Write-Host "Script terminé."
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Erreur lors de 'flutter run'."
+    exit $LASTEXITCODE
+}
+
+Write-Host "Application lancée."

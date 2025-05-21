@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 /// Source de données pour l'authentification Firebase
 /// 
@@ -12,7 +13,9 @@ class FirebaseAuthDataSource {
     FirebaseAuth? firebaseAuth,
     GoogleSignIn? googleSignIn,
   }) : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-       _googleSignIn = googleSignIn ?? GoogleSignIn();
+       _googleSignIn = googleSignIn ?? GoogleSignIn(
+         clientId: kIsWeb ? const String.fromEnvironment('FIREBASE_WEB_CLIENT_ID') : null,
+       );
 
   /// Obtient l'utilisateur Firebase actuellement connecté
   User? getCurrentUser() {

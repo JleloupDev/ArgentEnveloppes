@@ -54,3 +54,7 @@ Thumbs.db
 
 # Ne pas ignorer le dossier build/web car nous le gardons pour déployer manuellement
 !build/web/
+
+
+# Fichiers de secrets
+.env*
