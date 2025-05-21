@@ -25,7 +25,8 @@ $requiredVars = @(
     "FIREBASE_PROJECT_ID",
     "FIREBASE_STORAGE_BUCKET",
     "FIREBASE_MESSAGING_SENDER_ID", 
-    "FIREBASE_WEB_APP_ID"
+    "FIREBASE_WEB_APP_ID",
+    "FIREBASE_WEB_CLIENT_ID" # <--- AJOUTER CETTE LIGNE
 )
 
 $missingVars = @()
@@ -81,31 +82,25 @@ Write-Host "✓ Fichier firebase_options.dart mis à jour"
 
 # 2. Mettre à jour index.html
 Write-Host "Mise à jour du fichier index.html..."
-$indexHtmlPath = "index.html"
+$indexHtmlPath = "index.html" # Assurez-vous que c'est le bon chemin, ex: "web/index.html" ou "./index.html"
 if (Test-Path $indexHtmlPath) {
     $indexHtmlContent = Get-Content $indexHtmlPath -Raw
 
-    # Créer le bloc de configuration Firebase
-    $firebaseConfigBlock = @"
-const firebaseConfig = {
-      apiKey: "$Env:FIREBASE_WEB_API_KEY",
-      authDomain: "$Env:FIREBASE_AUTH_DOMAIN",
-      projectId: "$Env:FIREBASE_PROJECT_ID",
-      storageBucket: "$Env:FIREBASE_STORAGE_BUCKET",
-      messagingSenderId: "$Env:FIREBASE_MESSAGING_SENDER_ID",
-      appId: "$Env:FIREBASE_WEB_APP_ID"
-    };
-"@
+    # Mettre à jour le Google Sign-In Client ID
+    $indexHtmlContent = $indexHtmlContent -replace '__GOOGLE_SIGN_IN_CLIENT_ID_PLACEHOLDER__', $Env:FIREBASE_WEB_CLIENT_ID
+    
+    # Le remplacement du bloc firebaseConfig peut être supprimé si l'initialisation se fait uniquement via firebase_options.dart
+    # Si vous gardez l'initialisation Firebase JS dans index.html (ce qui n'est plus recommandé ici),
+    # assurez-vous que $Env:FIREBASE_WEB_CLIENT_ID est aussi inclus là si nécessaire.
+    # Pour l'instant, nous nous concentrons sur le meta tag.
 
-    # Remplacer le bloc existant
-    $pattern = '(?s)const firebaseConfig = \{.*?\};'
-    $indexHtmlContent = $indexHtmlContent -replace $pattern, $firebaseConfigBlock
-
-    # Enregistrer les modifications
+    # Enregistrer les modifications pour le Client ID
     Set-Content -Path $indexHtmlPath -Value $indexHtmlContent
-    Write-Host "✓ Fichier index.html mis à jour"
+    Write-Host "✓ Fichier index.html mis à jour (Google Client ID)"
+
 } else {
-    Write-Warning "Le fichier index.html n'existe pas, ignoré."
+    Write-Warning "Le fichier $indexHtmlPath n'existe pas dans le répertoire courant, ignoré."
+    # Si votre index.html est dans web/, changez $indexHtmlPath en "web/index.html"
 }
 
 Write-Host "Configuration Firebase appliquée avec succès pour l'environnement '$Environment'."
