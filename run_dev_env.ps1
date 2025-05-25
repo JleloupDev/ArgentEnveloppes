@@ -12,7 +12,7 @@ param (
 Set-Location -Path $PSScriptRoot
 
 Write-Host "Étape 1: Chargement de la configuration d'environnement depuis .env.$Environment.ps1..."
-$envFilePath = ".\env.$Environment.ps1"
+$envFilePath = ".\.env.$Environment.ps1"
 if (-not (Test-Path $envFilePath)) {
     Write-Error "Fichier de configuration d'environnement $envFilePath non trouvé. Arrêt du script."
     exit 1
@@ -73,8 +73,8 @@ if (-not $SkipRestore) {
 
 Write-Host "Étape 4: Lancement de l'application Flutter..."
 $finalDartDefines = $dartDefineArgs -join " "
-Write-Host "Commande: flutter run -d chrome --web-renderer html $finalDartDefines"
-flutter run -d chrome --web-renderer html @dartDefineArgs # Splatting pour les arguments
+Write-Host "Commande: flutter run -d chrome $finalDartDefines"
+flutter run -d chrome --web-port 5000 @dartDefineArgs # Splatting pour les arguments
 
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Erreur lors de 'flutter run'."

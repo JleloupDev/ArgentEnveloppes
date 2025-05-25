@@ -1,5 +1,6 @@
 import 'package:argentenveloppes/presentation/pages/auth/login_page.dart';
 import 'package:argentenveloppes/presentation/pages/auth/profile_page.dart';
+import 'package:argentenveloppes/presentation/pages/dashboard_page.dart';
 import 'package:argentenveloppes/presentation/providers/auth_provider.dart';
 import 'package:argentenveloppes/presentation/router/auth_guard.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class AppRouter {
   static const String initialRoute = '/';
   static const String loginRoute = '/login';
   static const String profileRoute = '/profile';
+  static const String dashboardRoute = '/dashboard'; // Ajout de la constante pour la route du dashboard
   
   /// Crée la configuration des routes
   static Map<String, WidgetBuilder> routes() {
@@ -19,6 +21,7 @@ class AppRouter {
       initialRoute: (context) => const AuthRedirector(),
       loginRoute: (context) => const LoginPage(),
       profileRoute: (context) => const AuthGuard(child: ProfilePage()),
+      dashboardRoute: (context) => const AuthGuard(child: DashboardPage()), // Ajout de la route du dashboard
       // Ajoutez ici d'autres routes qui nécessitent une authentification
       // Exemple : '/dashboard': (context) => const AuthGuard(child: DashboardPage()),
     };
@@ -39,10 +42,10 @@ class AuthRedirector extends ConsumerWidget {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (user != null) {
             // Utilisateur connecté, rediriger vers la page principale de l'application
-            Navigator.of(context).pushReplacementNamed('/profile');
+            Navigator.of(context).pushReplacementNamed(AppRouter.dashboardRoute); // Modifié pour rediriger vers le dashboard
           } else {
             // Utilisateur non connecté, rediriger vers la page de connexion
-            Navigator.of(context).pushReplacementNamed('/login');
+            Navigator.of(context).pushReplacementNamed(AppRouter.loginRoute);
           }
         });
 
