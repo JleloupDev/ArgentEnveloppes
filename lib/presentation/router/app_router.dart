@@ -1,6 +1,7 @@
 import 'package:argentenveloppes/presentation/pages/auth/login_page.dart';
 import 'package:argentenveloppes/presentation/pages/auth/profile_page.dart';
 import 'package:argentenveloppes/presentation/pages/dashboard_page.dart';
+import 'package:argentenveloppes/presentation/pages/envelope_detail_page.dart';
 import 'package:argentenveloppes/presentation/providers/auth_provider.dart';
 import 'package:argentenveloppes/presentation/router/auth_guard.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// 
 /// Configure toutes les routes de l'application et gère l'authentification
 class AppRouter {
-  static const String initialRoute = '/';
-  static const String loginRoute = '/login';
+  static const String initialRoute = '/';  static const String loginRoute = '/login';
   static const String profileRoute = '/profile';
   static const String dashboardRoute = '/dashboard'; // Ajout de la constante pour la route du dashboard
+  static const String envelopeDetailRoute = '/envelope';
   
   /// Crée la configuration des routes
   static Map<String, WidgetBuilder> routes() {

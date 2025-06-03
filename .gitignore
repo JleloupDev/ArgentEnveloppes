@@ -58,3 +58,7 @@ Thumbs.db
 
 # Fichiers de secrets
 .env*
+
+.idea/
+android/app/src/main/java/io/flutter/plugins
+ios/Flutter
