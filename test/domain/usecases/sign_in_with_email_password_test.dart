@@ -4,14 +4,24 @@ import 'package:argentenveloppes/domain/entities/user.dart';
 import 'package:mockito/mockito.dart';
 import 'package:argentenveloppes/domain/repositories/auth_repository.dart';
 
-class MockAuthRepository extends Mock implements AuthRepository {}
+class MockAuthRepository extends Mock implements AuthRepository {
+  @override
+  Future<User> signInWithEmailAndPassword(String email, String password) => super.noSuchMethod(
+        Invocation.method(
+          #signInWithEmailAndPassword,
+          [email, password],
+        ),
+        returnValue: Future.value(User(uid: '1', email: email)),
+        returnValueForMissingStub: Future.value(User(uid: '1', email: email)),
+      );
+}
 
 void main() {
   group('SignInWithEmailPasswordUseCase', () {
     test('calls repository.signInWithEmailAndPassword and returns User', () async {
       final mockRepo = MockAuthRepository();
       final useCase = SignInWithEmailPasswordUseCase(mockRepo);
-      final user = User(id: '1', email: 'test@test.com');
+      final user = User(uid: '1', email: 'test@test.com');
       when(mockRepo.signInWithEmailAndPassword('test@test.com', 'password'))
           .thenAnswer((_) async => user);
       final result = await useCase('test@test.com', 'password');
