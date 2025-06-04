@@ -3,7 +3,7 @@ name: Deploy Flutter Web App
 # Définition du déclencheur - exécution du workflow lors d'un push sur la branche main
 on:
   push:
-    branches: [ main, gh-pages ]
+    branches: [ main ]
   # Permet de lancer manuellement le workflow depuis l'interface GitHub
   workflow_dispatch:
 
