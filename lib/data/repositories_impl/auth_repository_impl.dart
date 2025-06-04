@@ -46,6 +46,22 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<User> signInWithEmailAndPassword(String email, String password) async {
+    try {
+      final userCredential = await dataSource.signInWithEmailAndPassword(email, password);
+      if (userCredential.user == null) {
+        throw firebase_auth.FirebaseAuthException(
+          code: 'user-not-found',
+          message: 'Aucun utilisateur trouvé avec cet email et ce mot de passe.',
+        );
+      }
+      return UserModel.fromFirebaseUser(userCredential.user!);
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      throw _mapFirebaseAuthError(e);
+    }
+  }
+
+  @override
   Future<void> signOut() {
     return dataSource.signOut();
   }
