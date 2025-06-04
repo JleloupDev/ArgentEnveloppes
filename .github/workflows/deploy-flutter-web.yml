@@ -20,7 +20,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.x'
+          flutter-version: '3.32.1'
           channel: 'stable'
 
       # Étape 3: Afficher la version de Flutter pour le débogage
