@@ -4,7 +4,6 @@ import 'package:mockito/mockito.dart';
 import 'package:argentenveloppes/domain/repositories/auth_repository.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {
-  @override
   Future<User> signInWithEmailAndPassword(String email, String password) => super.noSuchMethod(
         Invocation.method(
           #signInWithEmailAndPassword,

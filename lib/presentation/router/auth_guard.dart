@@ -52,6 +52,7 @@ class AuthGuard extends ConsumerWidget {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
+                  // ignore: unused_result
                   ref.refresh(authStateProvider);
                 },
                 child: const Text('Réessayer'),
