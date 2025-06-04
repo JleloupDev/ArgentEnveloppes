@@ -1,7 +1,6 @@
 import 'package:argentenveloppes/presentation/pages/auth/login_page.dart';
 import 'package:argentenveloppes/presentation/pages/auth/profile_page.dart';
 import 'package:argentenveloppes/presentation/pages/dashboard_page.dart';
-import 'package:argentenveloppes/presentation/pages/envelope_detail_page.dart';
 import 'package:argentenveloppes/presentation/providers/auth_provider.dart';
 import 'package:argentenveloppes/presentation/router/auth_guard.dart';
 import 'package:flutter/material.dart';

@@ -51,11 +51,6 @@ class FirebaseAuthDataSource {
     return _firebaseAuth.signInWithCredential(credential);
   }
 
-  /// Connecte un utilisateur avec email et mot de passe
-  Future<UserCredential> signInWithEmailAndPassword(String email, String password) {
-    return _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-  }
-
   /// Déconnecte l'utilisateur actuel
   Future<void> signOut() async {
     await Future.wait([
