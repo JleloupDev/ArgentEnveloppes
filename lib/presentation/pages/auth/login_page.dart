@@ -1,4 +1,5 @@
 import 'package:argentenveloppes/presentation/providers/auth_provider.dart';
+import 'package:argentenveloppes/presentation/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,13 +17,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   void dispose() {
     super.dispose();
   }
-
   Future<void> _signInWithGoogle() async {
     setState(() => _isLoading = true);
 
     try {
       await ref.read(authNotifierProvider.notifier).signInWithGoogle();
-      // La navigation se fera automatiquement grâce à la protection des routes
+      // Navigation manuelle vers le dashboard après connexion réussie
+      if (mounted) {
+        Navigator.of(context).pushReplacementNamed(AppRouter.dashboardRoute);
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

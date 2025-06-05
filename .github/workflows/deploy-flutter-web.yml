@@ -7,6 +7,12 @@ on:
   # Permet de lancer manuellement le workflow depuis l'interface GitHub
   workflow_dispatch:
 
+# Add permissions for GitHub Pages deployment
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
