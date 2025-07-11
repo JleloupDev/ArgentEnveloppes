@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/version_info.dart';
 import '../pages/about_page.dart';
+import '../providers/auth_provider.dart';
+import '../router/app_router.dart';
 
-class MainDrawer extends StatelessWidget {
+class MainDrawer extends ConsumerWidget {
   const MainDrawer({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Drawer(
       child: Column(
         children: [
@@ -97,6 +100,15 @@ class MainDrawer extends StatelessWidget {
                     );
                   },
                 ),
+                const Divider(),
+                ListTile(
+                  leading: const Icon(Icons.logout, color: Colors.red),
+                  title: const Text(
+                    'Déconnexion',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  onTap: () => _showLogoutDialog(context, ref),
+                ),
               ],
             ),
           ),
@@ -121,5 +133,34 @@ class MainDrawer extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _showLogoutDialog(BuildContext context, WidgetRef ref) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Déconnexion'),
+        content: const Text('Voulez-vous vraiment vous déconnecter ?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Déconnexion'),
+          ),
+        ],
+      ),
+    );
+
+    if (result == true && context.mounted) {
+      Navigator.pop(context); // Fermer le drawer d'abord
+      await ref.read(authNotifierProvider.notifier).signOut();
+      if (context.mounted) {
+        Navigator.pushReplacementNamed(context, AppRouter.loginRoute);
+      }
+    }
   }
 }

@@ -6,6 +6,9 @@ import '../../domain/entities/transaction.dart';
 import '../providers/envelopes_provider.dart';
 import '../providers/categories_provider.dart';
 import '../providers/transactions_provider.dart';
+import '../providers/auth_provider.dart';
+import '../widgets/main_drawer.dart';
+import '../router/app_router.dart';
 import 'create_envelope_page.dart';
 import 'category_detail_page.dart';
 
@@ -20,6 +23,11 @@ class DashboardPage extends ConsumerWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
           IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Déconnexion',
+            onPressed: () => _showLogoutDialog(context, ref),
+          ),
+          IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
               // Navigation vers les paramètres
@@ -27,6 +35,7 @@ class DashboardPage extends ConsumerWidget {
           ),
         ],
       ),
+      drawer: const MainDrawer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -526,5 +535,33 @@ class DashboardPage extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _showLogoutDialog(BuildContext context, WidgetRef ref) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Déconnexion'),
+        content: const Text('Voulez-vous vraiment vous déconnecter ?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Déconnexion'),
+          ),
+        ],
+      ),
+    );
+
+    if (result == true && context.mounted) {
+      await ref.read(authNotifierProvider.notifier).signOut();
+      if (context.mounted) {
+        Navigator.pushReplacementNamed(context, AppRouter.loginRoute);
+      }
+    }
   }
 }

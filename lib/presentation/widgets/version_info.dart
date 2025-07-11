@@ -72,7 +72,7 @@ class _VersionInfoState extends State<VersionInfo> {
     return Container(
       padding: widget.padding ?? const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-        color: widget.backgroundColor ?? Colors.grey.withOpacity(0.1),
+        color: widget.backgroundColor ?? Colors.grey.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
