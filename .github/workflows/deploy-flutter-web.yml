@@ -107,6 +107,23 @@ jobs:
       # Étape 10: Compiler l'application pour le web
       - name: Build web
         run: flutter build web --release --base-href "/ArgentEnveloppes/"
+        
+      # Étape 10.1: Corriger l'index.html pour GitHub Pages
+      - name: Fix index.html for GitHub Pages
+        run: |
+          # Remplacer la base href par la valeur correcte
+          sed -i 's|<base href="$FLUTTER_BASE_HREF">|<base href="/ArgentEnveloppes/">|g' build/web/index.html
+          
+          # Vérifier que le fichier flutter_bootstrap.js existe
+          if [ ! -f "build/web/flutter_bootstrap.js" ]; then
+            echo "WARNING: flutter_bootstrap.js not found after build!"
+            ls -la build/web/
+          else
+            echo "✓ flutter_bootstrap.js found in build/web/"
+          fi
+          
+          echo "Index.html après correction:"
+          head -20 build/web/index.html
         # Étape 8: Ajouter le fichier .nojekyll pour désactiver Jekyll sur GitHub Pages
       - name: Add .nojekyll file
         run: touch build/web/.nojekyll      # Étape 8.1: Copier tous les fichiers statiques nécessaires dans le répertoire de build
