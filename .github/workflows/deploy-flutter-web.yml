@@ -66,7 +66,39 @@ jobs:
             echo "WARNING: Firebase configuration secrets not set. Using placeholder values."
           fi
 
-      # Étape 8: Compiler l'application pour le web
+      # Étape 8: Mettre à jour les informations de version
+      - name: Update version info
+        run: |
+          # Générer les informations de build
+          BUILD_DATE=$(date '+%d/%m/%Y %H:%M')
+          BUILD_NUMBER=${{ github.run_number }}
+          GIT_COMMIT=${GITHUB_SHA:0:7}
+          GIT_BRANCH=${GITHUB_REF#refs/heads/}
+          
+          # Créer le fichier version.json mis à jour
+          cat > version.json << EOF
+          {
+            "app_name": "argentveloppes",
+            "version": "1.0.0",
+            "build_number": "$BUILD_NUMBER",
+            "build_date": "$BUILD_DATE",
+            "git_commit": "$GIT_COMMIT",
+            "git_branch": "$GIT_BRANCH",
+            "deployed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          EOF
+          
+          echo "Version info updated:"
+          cat version.json
+
+      # Étape 9: Copier le fichier version.json dans build/web
+      - name: Copy version.json to build directory
+        run: |
+          mkdir -p build/web
+          cp version.json build/web/
+          echo "✓ version.json copied to build/web/"
+
+      # Étape 10: Compiler l'application pour le web
       - name: Build web
         run: flutter build web --release --base-href "/ArgentEnveloppes/"
         # Étape 8: Ajouter le fichier .nojekyll pour désactiver Jekyll sur GitHub Pages
