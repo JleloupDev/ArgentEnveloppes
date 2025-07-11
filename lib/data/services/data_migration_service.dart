@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import '../domain/entities/envelope.dart';
-import '../domain/entities/category.dart';
-import '../domain/repositories/budget_repository.dart';
+import '../../domain/entities/envelope.dart';
+import '../../domain/entities/category.dart';
+import '../../domain/repositories/budget_repository.dart';
 
 class DataMigrationService {
   final BudgetRepository _repository;
